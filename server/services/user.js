@@ -8,6 +8,9 @@ class userService {
     try {
       const user = await this.userRepository.getUserById(id);
 
+      if (!user) {
+        throw new Error("User not found");
+      }
       const { password, ...rest } = user._doc; // can't send the pass to the client ;)
       return rest;
     } catch (error) {

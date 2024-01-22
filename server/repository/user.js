@@ -7,7 +7,7 @@ class userRepo extends crudRepo {
   }
   async getUserById(id) {
     try {
-      const doc = await this.model.findById(id);
+      const doc = await this.model.findOne({ userID: id });
       return doc;
     } catch (error) {
       console.log("error in user repo" + error);

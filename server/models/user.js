@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { uuidv4 } = require("uuid");
 
 const { jwtconfig } = require("../configs/server-config");
 
@@ -31,6 +32,11 @@ const userSchema = new mongoose.Schema(
       required: [true, "can't be blank"],
       minLength: [6, "is too short"],
     },
+    userID: {
+      type: String,
+      required: [true, "can't be blank"],
+      index: { unique: true },
+    },
   },
   { timestamps: true }
 );
@@ -54,7 +60,7 @@ userSchema.methods.comparePassword = function (password) {
 userSchema.methods.generateJWT = function () {
   return jwt.sign(
     {
-      id: this._id,
+      id: this.userID,
       username: this.username,
     },
     jwtconfig.secret,

@@ -1,4 +1,5 @@
 const { userService } = require("../services");
+const { v4 } = require("uuid");
 
 class userController {
   constructor() {
@@ -19,6 +20,7 @@ class userController {
         email: req.body.email,
         password: req.body.password,
         username: req.body.username,
+        userID: v4(),
       };
       // console.log(req.body);
       const user = await this.service.signUp(data);

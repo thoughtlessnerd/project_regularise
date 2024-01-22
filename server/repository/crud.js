@@ -29,18 +29,18 @@ class crudRepo {
       throw error;
     }
   }
-  async destroy(id) {
+  async destroy(query) {
     try {
-      const doc = await this.model.findByIdAndDelete(id);
+      const doc = await this.model.findOneAndDelete(query);
       return doc;
     } catch (error) {
       console.log("error in crud repo" + error);
       throw error;
     }
   }
-  async update(id, data) {
+  async update(query, data) {
     try {
-      const res = await this.model.findByIdAndUpdate(id, data, { new: true });
+      const res = await this.model.findOneAndUpdate(query, data, { new: true });
       return res;
     } catch (error) {
       console.log("error in crud repo" + error);

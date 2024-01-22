@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { jwtconfig } = require("../configs/server-config");
-const { userRepo } = require("../repository");
+// const { userRepo } = require("../repository");
 
 const isAuthenticated = async (req, res, next) => {
   try {
@@ -9,9 +9,9 @@ const isAuthenticated = async (req, res, next) => {
     if (!decoded) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const userRepository = new userRepo();
-    const user = await userRepository.getUserById(decoded.id);
-    req.user = user.id;
+    // const userRepository = new userRepo();
+    // const user = await userRepository.getUserById(decoded.id);
+    req.user = decoded.id;
     next();
   } catch (error) {
     return res.status(401).json({ message: "Unauthorized" });
