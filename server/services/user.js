@@ -4,6 +4,16 @@ class userService {
   constructor() {
     this.userRepository = new userRepo();
   }
+  getUser = async (id) => {
+    try {
+      const user = await this.userRepository.getUserById(id);
+
+      const { password, ...rest } = user._doc; // can't send the pass to the client ;)
+      return rest;
+    } catch (error) {
+      throw error;
+    }
+  };
   signUp = async (data) => {
     try {
       const user = await this.userRepository.create(data);

@@ -4,6 +4,14 @@ class userController {
   constructor() {
     this.service = new userService();
   }
+  getUser = async (req, res) => {
+    try {
+      const user = await this.service.getUser(req.user);
+      res.status(200).json({ message: "success", success: true, data: user });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
   signUp = async (req, res) => {
     try {
       const data = {

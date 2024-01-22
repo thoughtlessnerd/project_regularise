@@ -7,6 +7,8 @@ const router = express.Router();
 router.post("/signup", userController.signUp);
 router.post("/signin", userController.signIn);
 
+router.get("/user", isAuthenticated, userController.getUser);
+
 // router.get("/test", isAuthenticated, (req, res) => {
 //   res.status(200).json({ message: "success", req: req.user });
 // });
