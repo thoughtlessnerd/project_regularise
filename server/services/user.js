@@ -7,7 +7,8 @@ class userService {
   signUp = async (data) => {
     try {
       const user = await this.userRepository.create(data);
-      return user;
+      const token = await user.generateJWT();
+      return token;
     } catch (error) {
       throw error;
     }
@@ -22,7 +23,8 @@ class userService {
       if (!isMatched) {
         throw new Error("Password not matched");
       }
-      return user._id;
+      const token = await user.generateJWT();
+      return token;
     } catch (error) {
       console.log("error in user service" + error);
       throw error;

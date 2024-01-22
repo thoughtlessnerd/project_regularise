@@ -7,7 +7,7 @@ module.exports = {
     uri: process.env.DB_URI,
     name: process.env.DB_NAME,
   },
-  jwt: {
+  jwtconfig: {
     secret: process.env.JWT_SECRET,
     expiration: process.env.JWT_EXPIRY,
   },

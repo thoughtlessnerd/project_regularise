@@ -12,9 +12,9 @@ class userController {
         password: req.body.password,
         username: req.body.username,
       };
-      console.log(req.body);
+      // console.log(req.body);
       const user = await this.service.signUp(data);
-      res.status(201).json(user._id);
+      res.status(201).json({ message: "signed up", success: true, data: user });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
