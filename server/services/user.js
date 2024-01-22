@@ -21,7 +21,10 @@ class userService {
     try {
       const user = await this.userRepository.create(data);
       const token = await user.generateJWT();
-      return token;
+
+      delete user._doc.password;
+
+      return { ...user._doc, token };
     } catch (error) {
       throw error;
     }
@@ -36,8 +39,9 @@ class userService {
       if (!isMatched) {
         throw new Error("Password not matched");
       }
+      delete user._doc.password;
       const token = await user.generateJWT();
-      return token;
+      return { ...user._doc, token };
     } catch (error) {
       console.log("error in user service" + error);
       throw error;
