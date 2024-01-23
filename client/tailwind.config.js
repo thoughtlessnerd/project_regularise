@@ -14,6 +14,15 @@ export default {
         primary:"#3A5CD6",
         secondary:"#102548",
         red:"#F54E4E",
+      },
+      width: {
+        '128': '32rem',
+        '160': '40rem',
+      },
+      height: {
+        '128': '32rem',
+        '160': '40rem',
+        '200': '50rem',
       }
     },
   },

@@ -1,10 +1,11 @@
-import Navbar from '../Navbar';
+import Navbar from '../common/Navbar';
 
-function LandingPage() {
+function LandingPage()
+{
   return (
     <>
-        <section className='min-h-screen container mx-auto p-2 md:px-8 flex flex-col justify-between'>
-            <Navbar className='md:absolute top-0 w-full'/>
+        <section className='min-h-screen container mx-auto px-2 md:px-8 flex flex-col justify-between'>
+            <Navbar className=''/>
             <div className="grow flex flex-col md:flex-row-reverse">
                 <div className="w-full">
                 <svg
