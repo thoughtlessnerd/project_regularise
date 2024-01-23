@@ -21,11 +21,6 @@ type AuthContextType = {
     }
 }
 
-type AuthResponseType = {
-    status:number,
-    [key:string]:any
-}
-
 const AuthContext = React.createContext<AuthContextType | null>(null);
 
 export function useAuth()
@@ -78,12 +73,11 @@ export function AuthProvier(props:{children:React.ReactNode})
     {
         try
         {
-            const response:AuthResponseType = await PostRequest("/signin",{email,password},false);
+            const response:AuthResponseType = await PostRequest("/user/signin",{email,password},false);
             
-            console.log(response);
             if(response.status == 200)
             {
-                saveLoginInfo(response);
+                saveLoginInfo(response.data);
                 return true;
             }
         }
@@ -97,12 +91,11 @@ export function AuthProvier(props:{children:React.ReactNode})
     {
         try
         {
-            const response:AuthResponseType = await PostRequest("/signup",{email,password,username,name},false);
-            console.log(response);
+            const response:AuthResponseType = await PostRequest("/user/signup",{email,password,username,name},false);
             if(response.status == 201)
             {
                 alert("Account Created TODO Toast Here");
-                saveLoginInfo(response);
+                saveLoginInfo(response.data);
                 return true;
             }
         }
@@ -164,7 +157,7 @@ export function AuthProvier(props:{children:React.ReactNode})
 
     function HandleErrors(e:any):AuthResponseType
     {
-        console.log(e);
+        console.error(e);
         return e.response;
     }
 
