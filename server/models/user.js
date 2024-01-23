@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { uuidv4 } = require("uuid");
 
 const { jwtconfig } = require("../configs/server-config");
 
