@@ -17,7 +17,11 @@ class fieldRepo extends crudRepo {
   }
   async updateFields(id, newData) {
     try {
-      const doc = await this.model.findOneAndUpdate({ userID: id }, newData);
+      const doc = await this.model.findOneAndUpdate(
+        { userID: id },
+        { fields: newData },
+        { new: true }
+      );
       return doc;
     } catch (error) {
       console.log("error in field repo" + error);
@@ -35,7 +39,7 @@ class fieldRepo extends crudRepo {
       let doc = await this.model.findOneAndUpdate(
         { userID: id },
         { $set: { ...update } },
-        { upsert: true }
+        { new: true, upsert: true }
       );
       return doc;
     } catch (error) {
@@ -53,8 +57,9 @@ class fieldRepo extends crudRepo {
             lastUpdateTime: updateTime,
           },
         },
-        { upsert: true }
+        { new: true, upsert: true }
       );
+      console.log(doc);
       return doc;
     } catch (error) {
       console.log("error in field repo" + error);
@@ -65,7 +70,8 @@ class fieldRepo extends crudRepo {
     try {
       const doc = await this.model.findOneAndUpdate(
         { userID: id },
-        { $unset: { [`fields.${fieldName}`]: 1 } }
+        { $unset: { [`fields.${fieldName}`]: 1 } },
+        { new: true }
       );
       return doc;
     } catch (error) {
@@ -77,7 +83,8 @@ class fieldRepo extends crudRepo {
     try {
       const doc = await this.model.findOneAndUpdate(
         { userID: id },
-        { lastDone: fields }
+        { lastDone: fields },
+        { new: true }
       );
       return doc;
     } catch (error) {
