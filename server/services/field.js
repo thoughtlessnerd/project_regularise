@@ -53,7 +53,16 @@ class fieldService {
       for (let i = 0; i < fields.length; i++) {
         fieldObj[fields[i]] = defaultRating;
       }
-      const res = await this.fieldRepo.createFields(userID, fieldObj);
+      const now = new Date();
+      const lastTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() - 1,
+        5,
+        30,
+        0
+      ); // 00:00 UTC from yesterday
+      const res = await this.fieldRepo.createFields(userID, fieldObj, lastTime);
       return res;
     } catch (error) {
       throw error;
@@ -61,7 +70,16 @@ class fieldService {
   };
   createField = async (userID, fieldName) => {
     try {
-      const res = await this.fieldRepo.createField(userID, fieldName);
+      const now = new Date();
+      const lastTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() - 1,
+        5,
+        30,
+        0
+      ); // 00:00 UTC from yesterday
+      const res = await this.fieldRepo.createField(userID, fieldName, lastTime);
       return res;
     } catch (error) {
       throw error;
@@ -70,6 +88,14 @@ class fieldService {
   deleteField = async (userID, fieldName) => {
     try {
       const res = await this.fieldRepo.deleteField(userID, fieldName);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
+  setDoneFields = async (userID, fields) => {
+    try {
+      const res = await this.fieldRepo.setDoneFields(userID, fields);
       return res;
     } catch (error) {
       throw error;

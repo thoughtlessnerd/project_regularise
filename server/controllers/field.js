@@ -43,6 +43,16 @@ class fieldController {
       res.status(400).json({ error: error.message });
     }
   };
+  setDoneFields = async (req, res) => {
+    try {
+      const userID = req.user;
+      const fields = req.body.fields;
+      const result = await this.service.setDoneFields(userID, fields);
+      res.status(200).json({ message: "success", success: true, data: result });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
 }
 
 module.exports = new fieldController();
