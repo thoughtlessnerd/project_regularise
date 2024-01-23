@@ -22,10 +22,15 @@ export default function Timer()
     const now:any = new Date();
 
     // Set the end of the day (23:59:59) for the current date
-    const endOfDay:any = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+    const resetTime:any = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 5, 30, 0);
+
+    // If the current time is past the reset time, set the reset time for the next day
+    if (now > resetTime) {
+      resetTime.setDate(resetTime.getDate() + 1);
+    }
 
     // Calculate the time remaining in milliseconds
-    const timeRemaining = endOfDay - now;
+    const timeRemaining = resetTime - now;
 
     // Calculate hours, minutes, and seconds from milliseconds
     const hours = Math.floor(timeRemaining / (1000 * 60 * 60));

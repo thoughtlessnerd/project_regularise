@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router"
-import LandingPage from "./components/pages/LandingPage"
-import SignInPage from "./components/pages/SignInPage"
-import SignUpPage from "./components/pages/SignUpPage"
+import LandingPage from "./pages/LandingPage"
+import SignInPage from "./pages/SignInPage"
+import SignUpPage from "./pages/SignUpPage"
 import { useAuth } from "./components/context/AuthContext"
-import Dashboard from "./components/pages/Dashboard"
+import Dashboard from "./pages/Dashboard"
 
 function App() {
   const auth = useAuth();

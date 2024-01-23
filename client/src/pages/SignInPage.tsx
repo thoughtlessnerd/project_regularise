@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import Button from "../common/Button";
-import Input from "../common/Input";
+import Button from "../components/common/Button";
+import Input from "../components/common/Input";
 import { useState, FormEvent } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../components/context/AuthContext";
 
 export default function SignInPage() {
   const auth = useAuth();
