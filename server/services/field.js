@@ -8,11 +8,19 @@ class fieldService {
   getFields = async (userID) => {
     try {
       const fields = await this.fieldRepo.getFieldsByUserId(userID);
+      if (!fields) {
+        return null;
+      }
       const lastTime = fields.lastUpdateTime;
       const lastDone = fields.lastDone;
+      const history = fields.history;
+      const newHistory = { ...history };
 
       // Get the current date and time in UTC
       let currentDate = new Date();
+      let lastDay = lastTime.getUTCDate();
+      let lastMonth = lastTime.getUTCMonth();
+      let currentMonth = currentDate.getUTCMonth();
 
       // Set the time to 00:00:00 for the current date
       currentDate.setUTCHours(0, 0, 0, 0);
@@ -25,13 +33,16 @@ class fieldService {
       ) {
         currentDate.setUTCDate(currentDate.getUTCDate() - 1);
       }
-      console.log(currentDate);
-      console.log(lastTime);
+
+      if (currentMonth !== lastMonth) {
+        for (let key in newHistory) {
+          newHistory[key].shift();
+          newHistory[key].push(0);
+        }
+      }
 
       let timeDiff =
         (currentDate.valueOf() - lastTime.valueOf()) / (1000 * 60 * 60 * 24); // changes the time to days
-
-      console.log(timeDiff);
 
       if (timeDiff >= 1) {
         const oldFields = fields.fields;
@@ -43,6 +54,12 @@ class fieldService {
             newFields[key] += Math.floor(
               ratingChange * (Math.random() * 0.5 + 1)
             );
+
+            let elem = newHistory[key][newHistory[key].length - 1];
+
+            elem = elem | (1 << (lastDay - 1));
+
+            newHistory[key][newHistory[key].length - 1] = elem;
           } else {
             newFields[key] -= Math.floor(
               ratingChange * (Math.random() * 0.5 + 1)
@@ -66,7 +83,9 @@ class fieldService {
           { userID },
           {
             fields: newFields,
+            lastDone: [],
             lastUpdateTime: currentDate,
+            history: newHistory,
           }
         );
       }
@@ -109,6 +128,7 @@ class fieldService {
     try {
       // Get the current date and time in UTC
       let currentDate = new Date();
+      let history = new Array(13).fill(0); // 13 numbers for 13 months
 
       // Set the time to 00:00:00 for the current date
       currentDate.setUTCHours(0, 0, 0, 0);
@@ -125,7 +145,8 @@ class fieldService {
       const res = await this.fieldRepo.createField(
         userID,
         fieldName,
-        currentDate
+        currentDate,
+        history
       );
       return res;
     } catch (error) {
