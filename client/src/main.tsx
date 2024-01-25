@@ -8,9 +8,9 @@ import { AuthProvier } from './components/context/AuthContext.tsx'
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
-    <AuthProvier>
-      <App />
-    </AuthProvier>
+      <AuthProvier>
+        <App />
+      </AuthProvier>
     </BrowserRouter>
   </React.StrictMode>,
 )

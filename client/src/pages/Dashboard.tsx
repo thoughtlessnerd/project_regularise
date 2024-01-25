@@ -1,19 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect , useState } from "react";
 import Button from "../components/common/Button";
 import Navbar from "../components/common/Navbar";
 import { useAuth } from "../components/context/AuthContext";
 import FieldsBento from "../components/dashboard/FieldsBento";
 import Input from "../components/common/Input";
+import { useModal } from "../components/context/ModalContext";
 
 export default function Dashboard() {
   const auth = useAuth();
 
   const [fields, setFields] = useState<any>();
-  const [addFieldModelOpen, setAddFieldModelOpen] = useState<boolean>(false);
+  const [addFieldModalOpen, setAddFieldModalOpen] = useState<boolean>(false);
   const [newFieldName, setNewFieldName] = useState<InputState>({
     value: "",
     hasError: false,
   });
+
+  const modal = useModal();
 
   useEffect(() => {
     GetFields();
@@ -49,7 +52,7 @@ export default function Dashboard() {
       if (response.status == 201) {
         setFields(response.data.data.fields);
         setNewFieldName((prev) => ({ ...prev, value: "" }));
-        setAddFieldModelOpen(false);
+        setAddFieldModalOpen(false);
       }
     } catch (e) {
       console.error(e);
@@ -61,27 +64,27 @@ export default function Dashboard() {
     <>
       <div
         className={`${
-          addFieldModelOpen
+          addFieldModalOpen
             ? "bg-black/80 backdrop-blur-sm"
             : "pointer-events-none"
         } duration-500 fixed h-screen w-screen top-0 left-0 z-10 grid place-items-center`}
       >
         <div
           onClick={() => {
-            setAddFieldModelOpen(false);
+            setAddFieldModalOpen(false);
           }}
           className={`absolute w-full h-full -z-10`}
         ></div>
         <div
           className={`card max-w-lg w-full p-4 lg:p-8 ${
-            addFieldModelOpen ? "" : "-translate-y-[100vh]"
+            addFieldModalOpen ? "" : "-translate-y-[100vh]"
           }`}
         >
           <div className="flex justify-between items-center">
             <h1 className="text-2xl md:text-4xl font-medium">Add Field</h1>
             <svg
               onClick={() => {
-                setAddFieldModelOpen(false);
+                setAddFieldModalOpen(false);
               }}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -179,8 +182,9 @@ export default function Dashboard() {
                 </svg>
               </div>
               <div
-                onClick={() => {
-                  auth?.APIFunctions.SignOut();
+                onClick={async () => {
+                  if(await modal?.CreateModal("Sign Out",<h1>Are you sure you want to Sign Out?</h1>,"Yes","No"))
+                    auth?.APIFunctions.SignOut();
                 }}
                 className="cursor-pointer h-full bg-red grow rounded-lg grid place-content-center hover:grow-[2] duration-500"
               >
@@ -210,7 +214,7 @@ export default function Dashboard() {
         <div className="h-px md:h-1 bg-gradient-to-r from-primary to-accent max-w-96 mt-1 md:mt-4"></div>
         <FieldsBento
           AddFieldFunction={() => {
-            setAddFieldModelOpen(true);
+            setAddFieldModalOpen(true);
           }}
           fields={fields}
         />
