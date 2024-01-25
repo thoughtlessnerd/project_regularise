@@ -1,14 +1,14 @@
-function FieldsBento(props:{fields:any,AddFieldFunction:()=>void})
+function FieldsBento(props:{fieldsData:any,AddFieldFunction:()=>void})
 {
     const fieldCardClass = 'card h-48 md:h-64 w-128 grow';
 
     return (
         <div className="flex flex-wrap gap-4 mt-8 mb-24">
             {
-                props.fields && Object.keys(props.fields).map((key,index)=>{
+                props.fieldsData && Object.keys(props.fieldsData.fields).map((key,index)=>{
                     return <div key={index} className={`${fieldCardClass} flex flex-col justify-center items-center`}>
                         <h1 className="text-4xl font-bold">
-                            {props.fields[key]}
+                            {props.fieldsData.fields[key]}
                         </h1>
                         <h1 className="text-2xl">
                             {key}

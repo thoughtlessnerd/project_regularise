@@ -40,3 +40,16 @@ body
     linear-gradient(-150deg,var(--_l)) var(--c3) /* third color here */;
   background-size: calc(0.866*var(--s)) var(--s);
 }
+.clock
+{
+  font-family: 'Segment7Standard';
+}
+::-webkit-scrollbar
+{
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb
+{
+  @apply bg-primary rounded-full;
+}

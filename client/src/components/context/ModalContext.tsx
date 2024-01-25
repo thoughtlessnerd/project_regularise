@@ -74,7 +74,7 @@ export function ModalProvier(props: { children: React.ReactNode }) {
                     className={`absolute w-full h-full -z-10`}
                 ></div>
                 <div
-                    className={`card max-w-lg w-full p-4 lg:p-8 ${modalOpen ? "" : "-translate-y-[100vh]"
+                    className={`card max-w-lg w-full p-4 lg:p-8 ${modalOpen ? "" : "scale-125 opacity-0"
                         }`}
                 >
                     <div className="flex justify-between items-center">

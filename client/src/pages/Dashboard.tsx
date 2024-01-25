@@ -1,15 +1,17 @@
-import { useEffect , useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../components/common/Button";
 import Navbar from "../components/common/Navbar";
 import { useAuth } from "../components/context/AuthContext";
 import FieldsBento from "../components/dashboard/FieldsBento";
 import Input from "../components/common/Input";
 import { useModal } from "../components/context/ModalContext";
+import Heatmap from "../components/dashboard/Heatmap";
+import Checklist from "../components/dashboard/Checklist";
 
 export default function Dashboard() {
   const auth = useAuth();
 
-  const [fields, setFields] = useState<any>();
+  const [fieldsData, setFieldsData] = useState<any>();
   const [addFieldModalOpen, setAddFieldModalOpen] = useState<boolean>(false);
   const [newFieldName, setNewFieldName] = useState<InputState>({
     value: "",
@@ -30,7 +32,7 @@ export default function Dashboard() {
       );
       if (response.status == 200) {
         if (response.data.data) {
-          setFields(response.data.data.fields);
+          setFieldsData(response.data.data);
         }
       }
     } catch (e) {
@@ -50,7 +52,7 @@ export default function Dashboard() {
         true
       );
       if (response.status == 201) {
-        setFields(response.data.data.fields);
+        setFieldsData(response.data.data);
         setNewFieldName((prev) => ({ ...prev, value: "" }));
         setAddFieldModalOpen(false);
       }
@@ -63,11 +65,10 @@ export default function Dashboard() {
   return (
     <>
       <div
-        className={`${
-          addFieldModalOpen
+        className={`${addFieldModalOpen
             ? "bg-black/80 backdrop-blur-sm"
             : "pointer-events-none"
-        } duration-500 fixed h-screen w-screen top-0 left-0 z-10 grid place-items-center`}
+          } duration-500 fixed h-screen w-screen top-0 left-0 z-10 grid place-items-center`}
       >
         <div
           onClick={() => {
@@ -76,9 +77,8 @@ export default function Dashboard() {
           className={`absolute w-full h-full -z-10`}
         ></div>
         <div
-          className={`card max-w-lg w-full p-4 lg:p-8 ${
-            addFieldModalOpen ? "" : "-translate-y-[100vh]"
-          }`}
+          className={`card max-w-lg w-full p-4 lg:p-8 ${addFieldModalOpen ? "" : "-translate-y-[100vh]"
+            }`}
         >
           <div className="flex justify-between items-center">
             <h1 className="text-2xl md:text-4xl font-medium">Add Field</h1>
@@ -123,8 +123,8 @@ export default function Dashboard() {
       </div>
       <section className="container mx-auto px-2 md:px-8">
         <Navbar className="" />
-        <div className={`flex h-96 flex-col md:flex-row ${gap}`}>
-          <div className={`w-full md:w-96 h-full flex flex-col ${gap}`}>
+        <div className={`flex flex-col lg:flex-row ${gap}`}>
+          <div className={`w-full h-96 lg:w-96 flex flex-col ${gap}`}>
             <div className="card p-4 flex flex-col gap-2">
               <div className="flex gap-4">
                 <div className="h-24 w-24 overflow-clip rounded-lg">
@@ -183,7 +183,7 @@ export default function Dashboard() {
               </div>
               <div
                 onClick={async () => {
-                  if(await modal?.CreateModal("Sign Out",<h1>Are you sure you want to Sign Out?</h1>,"Yes","No"))
+                  if (await modal?.CreateModal("Sign Out", <h1>Are you sure you want to Sign Out?</h1>, "Yes", "No"))
                     auth?.APIFunctions.SignOut();
                 }}
                 className="cursor-pointer h-full bg-red grow rounded-lg grid place-content-center hover:grow-[2] duration-500"
@@ -206,8 +206,10 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          <div className="grow w-full md:w-96 card p-4">Heatmap and stuff</div>
+          <Checklist fieldsData={fieldsData} className="grow w-full lg:w-48 h-96 card p-4"/>
+          <Heatmap className="grow w-full lg:w-96 card p-4 hidden xl:block"/>
         </div>
+        <Heatmap className="grow w-full xl:hidden mt-4 card p-4"/>
         <h1 className="text-2xl sm:text-4xl lg:text-6xl mt-10 font-semibold">
           Progress at a <span className="gradient-text">Glance</span>
         </h1>
@@ -216,7 +218,7 @@ export default function Dashboard() {
           AddFieldFunction={() => {
             setAddFieldModalOpen(true);
           }}
-          fields={fields}
+          fieldsData={fieldsData}
         />
       </section>
     </>

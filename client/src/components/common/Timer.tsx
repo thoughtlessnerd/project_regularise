@@ -42,7 +42,7 @@ export default function Timer()
   }
   return (
     <div className="grid place-items-center">
-        <div className="font-medium text-xl md:text-4xl">{timer}</div>
+        <div className="font-medium text-xl md:text-4xl clock">{timer}</div>
         <div className="text-xs text-text/70">Time Left <span className="hidden lg:inline">for Today</span></div>
     </div>
   )
