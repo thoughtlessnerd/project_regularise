@@ -47,7 +47,7 @@ class fieldRepo extends crudRepo {
       throw error;
     }
   }
-  async createField(id, fieldName, updateTime) {
+  async createField(id, fieldName, updateTime, history) {
     try {
       let doc = await this.model.findOneAndUpdate(
         { userID: id },
@@ -55,6 +55,7 @@ class fieldRepo extends crudRepo {
           $set: {
             [`fields.${fieldName}`]: defaultRating,
             lastUpdateTime: updateTime,
+            [`history.${fieldName}`]: history,
           },
         },
         { new: true, upsert: true }
@@ -70,7 +71,7 @@ class fieldRepo extends crudRepo {
     try {
       const doc = await this.model.findOneAndUpdate(
         { userID: id },
-        { $unset: { [`fields.${fieldName}`]: 1 } },
+        { $unset: { [`fields.${fieldName}`]: 1, [`history.${fieldName}`]: 1 } },
         { new: true }
       );
       return doc;
@@ -84,6 +85,19 @@ class fieldRepo extends crudRepo {
       const doc = await this.model.findOneAndUpdate(
         { userID: id },
         { lastDone: fields },
+        { new: true }
+      );
+      return doc;
+    } catch (error) {
+      console.log("error in field repo" + error);
+      throw error;
+    }
+  }
+  async updateHistory(id, newData) {
+    try {
+      const doc = await this.model.findOneAndUpdate(
+        { userID: id },
+        { history: newData },
         { new: true }
       );
       return doc;

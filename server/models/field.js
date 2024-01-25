@@ -15,6 +15,9 @@ const fieldSchema = new mongoose.Schema({
   lastUpdateTime: {
     type: Date,
   },
+  history: {
+    type: Object,
+  },
 });
 
 module.exports = mongoose.model("Field", fieldSchema);
