@@ -7,6 +7,7 @@ import Input from "../components/common/Input";
 import { useModal } from "../components/context/ModalContext";
 import Heatmap from "../components/dashboard/Heatmap";
 import Checklist from "../components/dashboard/Checklist";
+import useBreakpoints from "../components/hooks/useBreakpoints";
 
 export default function Dashboard() {
   const auth = useAuth();
@@ -17,6 +18,7 @@ export default function Dashboard() {
     value: "",
     hasError: false,
   });
+  const breakpoints = useBreakpoints();
 
   const modal = useModal();
 
@@ -207,9 +209,13 @@ export default function Dashboard() {
             </div>
           </div>
           <Checklist fieldsData={fieldsData} className="grow w-full lg:w-48 h-96 card p-4"/>
-          <Heatmap className="grow w-full lg:w-96 card p-4 hidden xl:block"/>
+          {
+            !breakpoints.isXl && <Heatmap fieldsData={fieldsData} className="grow w-full lg:w-96 card p-4"/>
+          }
         </div>
-        <Heatmap className="grow w-full xl:hidden mt-4 card p-4"/>
+        {
+          breakpoints.isXl && <Heatmap fieldsData={fieldsData} className="grow w-full mt-4 card p-4"/>
+        }
         <h1 className="text-2xl sm:text-4xl lg:text-6xl mt-10 font-semibold">
           Progress at a <span className="gradient-text">Glance</span>
         </h1>

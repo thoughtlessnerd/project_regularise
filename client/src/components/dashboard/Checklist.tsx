@@ -21,7 +21,7 @@ export default function Checklist(props:{className?:string,fieldsData:any})
             console.log("Uploaded Checklist");
             UploadChecklist()
             setTimeoutId(-1);
-        }, 3000))
+        }, 1000))
     },[doneFields])
 
     function handleCheck(id:string)
@@ -47,7 +47,6 @@ export default function Checklist(props:{className?:string,fieldsData:any})
         try
         {
             response = await auth?.APIFunctions.PostRequest('/field/done',{fields:doneFields},true);
-            console .log(response);
         }
         catch(e)
         {
