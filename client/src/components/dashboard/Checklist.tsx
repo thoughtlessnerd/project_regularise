@@ -48,6 +48,7 @@ export default function Checklist(props: {
         { fields: doneFields },
         true
       );
+      return response;
     } catch (e) {
       console.error(e);
     }
