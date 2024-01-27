@@ -209,13 +209,11 @@ export default function Dashboard() {
             </div>
           </div>
           <Checklist fieldsData={fieldsData} className="grow w-full lg:w-48 h-96 card p-4"/>
-          {
+          {/* {
             !breakpoints.isXl && <Heatmap fieldsData={fieldsData} className="grow w-full lg:w-96 card p-4"/>
-          }
+          } */}
         </div>
-        {
-          breakpoints.isXl && <Heatmap fieldsData={fieldsData} className="grow w-full mt-4 card p-4"/>
-        }
+        <Heatmap fieldsData={fieldsData} className="grow w-full mt-4 card"/>
         <h1 className="text-2xl sm:text-4xl lg:text-6xl mt-10 font-semibold">
           Progress at a <span className="gradient-text">Glance</span>
         </h1>
