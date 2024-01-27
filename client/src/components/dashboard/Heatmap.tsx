@@ -25,7 +25,6 @@ function Heatmap(props: { fieldsData: any; className?: string })
     let result:number[][] = new Array(13).fill(0).map(() => new Array(32).fill(0));
     
     for (let key in props.fieldsData?.history) {
-      if(key != 'Chess')continue;
       let curr = props.fieldsData?.history[key];
       
       let toAdd:number[][] = [];
@@ -38,7 +37,7 @@ function Heatmap(props: { fieldsData: any; className?: string })
       {
         for(let j = 0 ; j < 32 ; j ++)
         {
-          result[i][j] = toAdd[i][j].valueOf();
+          result[i][j] += toAdd[i][j].valueOf();
         }
       }
     }
@@ -78,7 +77,7 @@ function Heatmap(props: { fieldsData: any; className?: string })
         {
           heatMapData?.map((monthArr,month)=>{
             return (
-              <div className={`${(month < heatMapData.length/2)?"hidden 2xl:block":""}`}>
+              <div key={month} className={`${(month < heatMapData.length/2)?"hidden 2xl:block":""}`}>
                 <div className="grid grid-flow-col grid-rows-7 gap-1">
                   {
                     monthArr.map((val,date)=>{
@@ -94,7 +93,9 @@ function Heatmap(props: { fieldsData: any; className?: string })
                             className="bg-zinc-800 p-2 rounded-md group-hover:flex hidden absolute -top-2 -translate-y-full left-1/2 -translate-x-1/2 z-10"
                           >
                             <span className="text-zinc-400 whitespace-nowrap">
-                              {val} Submissions
+                              {val} Task{val==1?"":"s"} done
+                              <br />
+                              <span className="text-xs">{date}-{month}</span>
                             </span>
                             <div
                               className="bg-inherit rotate-45 p-1 absolute bottom-0 translate-y-1/2 left-1/2 -translate-x-1/2"
