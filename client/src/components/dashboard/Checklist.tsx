@@ -90,11 +90,7 @@ export default function Checklist(props: {
                 />
                 <label
                   htmlFor={`${key}`}
-                  className={
-                    doneFields.includes(key)
-                      ? "line-through"
-                      : "" + ` opacity-90`
-                  }
+                  className={`${doneFields.includes(key)?"after:origin-left after:scale-100 opacity-50":"after:origin-right after:scale-0"} after:transition-transform transition-all relative after:bg-text after:absolute after:w-[120%] after:h-[2px] after:left-[-10%] after:top-1/2 after:-translate-y-1/2`}
                 >
                   {key}
                 </label>

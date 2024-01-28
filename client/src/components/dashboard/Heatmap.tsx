@@ -73,7 +73,7 @@ function Heatmap(props: { fieldsData: any; className?: string })
 
   return (
     <div className={`${props.className} p-4`}>
-      <div className="flex justify-between w-full p-4 gap-8">
+      <div className="flex justify-between w-full p-4 gap-8 overflow-x-auto md:overflow-x-visible">
         {
           heatMapData?.map((monthArr,month)=>{
             return (
