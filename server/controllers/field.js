@@ -53,6 +53,15 @@ class fieldController {
       res.status(400).json({ error: error.message });
     }
   };
+  getStats = async (req, res) => {
+    try {
+      const userID = req.user;
+      const result = await this.service.getStats(userID);
+      res.status(200).json({ message: "success", success: true, data: result });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
 }
 
 module.exports = new fieldController();

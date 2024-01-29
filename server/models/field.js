@@ -18,6 +18,9 @@ const fieldSchema = new mongoose.Schema({
   history: {
     type: Object,
   },
+  streaks: {
+    type: Object,
+  },
 });
 
 module.exports = mongoose.model("Field", fieldSchema);

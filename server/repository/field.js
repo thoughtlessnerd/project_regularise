@@ -56,6 +56,7 @@ class fieldRepo extends crudRepo {
             [`fields.${fieldName}`]: defaultRating,
             lastUpdateTime: updateTime,
             [`history.${fieldName}`]: history,
+            [`streaks.${fieldName}`]: 0,
           },
         },
         { new: true, upsert: true }
@@ -71,7 +72,13 @@ class fieldRepo extends crudRepo {
     try {
       const doc = await this.model.findOneAndUpdate(
         { userID: id },
-        { $unset: { [`fields.${fieldName}`]: 1, [`history.${fieldName}`]: 1 } },
+        {
+          $unset: {
+            [`fields.${fieldName}`]: 1,
+            [`history.${fieldName}`]: 1,
+            [`streaks.${fieldName}`]: 1,
+          },
+        },
         { new: true }
       );
       return doc;

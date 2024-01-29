@@ -11,6 +11,7 @@ class fieldService {
       if (!fields) {
         return null;
       }
+      const streaks = fields.streaks;
       const lastTime = fields.lastUpdateTime;
       const lastDone = fields.lastDone;
       const history = fields.history;
@@ -51,6 +52,8 @@ class fieldService {
 
         for (let key in newFields) {
           if (lastDone.includes(key)) {
+            streaks[key] += 1;
+
             newFields[key] += Math.floor(
               ratingChange * (Math.random() * 0.5 + 1)
             );
@@ -61,6 +64,7 @@ class fieldService {
 
             newHistory[key][newHistory[key].length - 1] = elem;
           } else {
+            streaks[key] = 0;
             newFields[key] -= Math.floor(
               ratingChange * (Math.random() * 0.5 + 1)
             );
@@ -71,6 +75,7 @@ class fieldService {
 
         if (timeDiff >= 1) {
           for (let key in newFields) {
+            streaks[key] = 0;
             newFields[key] -= Math.floor(
               ratingChange * (Math.random() * 0.5 + 1) * Math.floor(timeDiff)
             );
@@ -86,6 +91,7 @@ class fieldService {
             lastDone: [],
             lastUpdateTime: currentDate,
             history: newHistory,
+            streaks,
           }
         );
       }
