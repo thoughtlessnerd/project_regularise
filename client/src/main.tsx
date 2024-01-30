@@ -6,17 +6,17 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvier } from './components/context/AuthContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
+    // <BrowserRouter>
+    //   <AuthProvier>
+    //     <App />
+    //   </AuthProvier>
+    // </BrowserRouter>
+// ,
+  <React.StrictMode>
     <BrowserRouter>
       <AuthProvier>
         <App />
       </AuthProvier>
     </BrowserRouter>
-,
-  // <React.StrictMode>
-  //   <BrowserRouter>
-  //     <AuthProvier>
-  //       <App />
-  //     </AuthProvier>
-  //   </BrowserRouter>
-  // </React.StrictMode>,
+  </React.StrictMode>,
 )

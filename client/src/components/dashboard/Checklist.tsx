@@ -20,7 +20,7 @@ export default function Checklist(props: {
     }
     setTimeoutId(
       setTimeout(() => {
-        console.log("Uploaded Checklist");
+        // console.log("Uploaded Checklist");
         UploadChecklist();
         setTimeoutId(-1);
       }, 1000)

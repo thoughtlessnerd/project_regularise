@@ -17,6 +17,7 @@ type AuthContextType = {
         SignUp:(email:string,password:string,name:string,username:string)=>Promise<boolean>,
         SignOut:()=>void,
         PostRequest:(url:string,body:any,needsToken:boolean,params?:any)=>Promise<any>,
+        DeleteRequest:(url:string,body:any,needsToken:boolean,params?:any)=>Promise<any>,
         GetRequest:(url:string,needsToken:boolean,params?:any)=>Promise<any>
     }
 }
@@ -50,7 +51,8 @@ export function AuthProvier(props:{children:React.ReactNode})
         SignUp,
         SignOut,
         PostRequest,
-        GetRequest
+        GetRequest,
+        DeleteRequest
     };
 
     const value = {
@@ -142,6 +144,27 @@ export function AuthProvier(props:{children:React.ReactNode})
             if(needsToken && isAuthorized)
             {
                 response = await axios.post(url,body,{headers:{authorization: `${userdata?.token}`},params:params});
+            }
+            else
+            {
+                response = await axios.post(url,body,{params:params});
+            }   
+        }
+        catch(e:any)
+        {
+            return HandleErrors(e);
+        }
+        return response;
+    }
+    async function DeleteRequest(url:string,body:any,needsToken:boolean,params?:any)
+    {
+        let response:AuthResponseType;
+
+        try
+        {
+            if(needsToken && isAuthorized)
+            {
+                response = await axios.delete(url,{headers:{authorization: `${userdata?.token}`},data:body})
             }
             else
             {

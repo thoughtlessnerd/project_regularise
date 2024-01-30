@@ -1,113 +1,77 @@
-import { useEffect, useState } from "react";
-import useBreakpoints from "../hooks/useBreakpoints";
+import { useEffect, useMemo, useState } from "react";
 
-function Heatmap(props: { fieldsData: any; className?: string })
+function Heatmap(props: { heatMapData: number[], className?: string,numberOfMonths:number })
 {
   const [heatMapData,setHeatMapData] = useState<number[][]>();
 
-  function convertNumToArray(num: number) {
+  function convertNumToArray(num: number)
+  {
     // convert number to array of 0s and 1s
     let res = [];
     let idx = 0;
     while (idx < 32) {
-      if (num & (1 << idx)) {
-        res.push(1);
-      } else {
-        res.push(0);
-      }
+      if (num & (1 << idx))res.push(1);
+      else res.push(0);
       idx++;
     }
     return res;
   }
 
-  useEffect(() => {
-    if (!props.fieldsData) return;
-    let result:number[][] = new Array(13).fill(0).map(() => new Array(32).fill(0));
-    
-    for (let key in props.fieldsData?.history) {
-      let curr = props.fieldsData?.history[key];
-      
-      let toAdd:number[][] = [];
+  useEffect(()=>{
+    // if(!props.heatMapData)return;
+    let res:number[][] = [];
 
-      for (let i = 0; i < curr.length; i++) {
-        let currArr = convertNumToArray(curr[i]);
-        toAdd.push(currArr);
-      }
-      for(let i = 0 ; i < 13 ; i++)
-      {
-        for(let j = 0 ; j < 32 ; j ++)
-        {
-          result[i][j] += toAdd[i][j].valueOf();
-        }
-      }
+    for(let index = 0 ; index < props.heatMapData.length ; index++)
+    {
+      res.push(convertNumToArray(props.heatMapData[index]));
     }
-    console.log(result);
-    setHeatMapData(result);
-  }, [props.fieldsData]);
 
-  const currentMonthIndex = new Date().getMonth();
-  const allMonths = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-
-  const monthStrings = Array.from({ length: 13 }, (_, index) => {
-    const monthIndex = (currentMonthIndex + index) % 12;
-    return allMonths[monthIndex];
-  });
-
+    setHeatMapData(res);
+  },[props.heatMapData])
   
-  function getColor(val:number)
-  {
-    if(val > 4)return "bg-primary";
+  
+  
+  const monthsFromCurrent = useMemo(()=>{
+    const months = [
+      'January', 'February', 'March', 'April',
+      'May', 'June', 'July', 'August',
+      'September', 'October', 'November', 'December'
+    ];
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    return months.slice(currentMonth).concat(months.slice(0, currentMonth + 1));
+  },[])
 
-    const colors:{[key:number]:string} = {
-      0:"bg-primary/0",
-      1:"bg-primary/20",
-      2:"bg-primary/50",
-      3:"bg-primary/70",
-      4:"bg-primary/90",
-    }
-    return colors[val];
-  }
 
   return (
-    <div className={`${props.className} p-4`}>
-      <div className="flex justify-between w-full p-4 gap-8 overflow-x-auto md:overflow-x-visible">
+    <div className={`${props.className} overflow-x-auto`}>
+      <div className="h-full w-full flex gap-4 justify-center items-center">
         {
-          heatMapData?.map((monthArr,month)=>{
-            return (
-              <div key={month} className={`${(month < heatMapData.length/2)?"hidden 2xl:block":""}`}>
-                <div className="grid grid-flow-col grid-rows-7 gap-1">
-                  {
-                    monthArr.map((val,date)=>{
-                      let currentDate = new Date().getDate()
-                      if(month == heatMapData.length-1 && date > currentDate)
-                      {
-                        return<></>
-                      }
-                      return (
-                        <div key={date} className={`bg-background2 rounded-sm w-2 md:w-3 h-2 md:h-3 relative group`}>
-                          <div className={`${getColor(val)} w-full h-full`}/>
-                          <div
-                            className="bg-zinc-800 p-2 rounded-md group-hover:flex hidden absolute -top-2 -translate-y-full left-1/2 -translate-x-1/2 z-10"
-                          >
-                            <span className="text-zinc-400 whitespace-nowrap">
-                              {val} Task{val==1?"":"s"} done
-                              <br />
-                              <span className="text-xs">{date}-{month}</span>
-                            </span>
-                            <div
-                              className="bg-inherit rotate-45 p-1 absolute bottom-0 translate-y-1/2 left-1/2 -translate-x-1/2"
-                            ></div>
+          heatMapData?.map((daysArray,monthIndex)=>{
+            if(monthIndex < heatMapData.length - props.numberOfMonths)return<></>;
+            return(
+              <>
+                <div key={monthIndex} className="flex flex-col items-center">
+                  <div className="gap-[1px] grid grid-rows-7 grid-flow-col">
+                    {
+                      daysArray?.map((dayValue,dayIndex)=>{
+                        let putCross = (dayIndex!= 0 && daysArray[dayIndex - 1] == 1 && daysArray[dayIndex] == 0 && dayIndex != new Date().getDate() - 1)
+                        return(
+                          <div key={dayIndex} className="bg-background2 border border-text/5 rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square">
+                            <div className={`h-full w-full ${(dayValue==1)?"bg-primary":"hidden"} rounded`}/>
+                            <svg xmlns="http://www.w3.org/2000/svg" className={` ${(!putCross)?"hidden":""} w-full h-full scale-[2] text-red`} viewBox="0 0 24 24" fill="none">
+                              <path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
                           </div>
-                        </div>
-                      )
-                    })
-                  }
+                        )
+                      })
+                    }
+                  </div>
+                  <h1 className="text-xs mt-4 opacity-70 uppercase hidden lg:block">{monthsFromCurrent[monthIndex]}</h1>
+                  <h1 className="text-xs mt-4 opacity-70 uppercase lg:hidden">{monthsFromCurrent[monthIndex].slice(0,3)}</h1>
                 </div>
-                <h1 className="text-xs opacity-50 mt-4">{monthStrings[month]}</h1>
-              </div>
+              </>
             )
           })
         }

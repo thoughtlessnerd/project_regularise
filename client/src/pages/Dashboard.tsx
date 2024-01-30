@@ -7,7 +7,6 @@ import Input from "../components/common/Input";
 import { useModal } from "../components/context/ModalContext";
 import Heatmap from "../components/dashboard/Heatmap";
 import Checklist from "../components/dashboard/Checklist";
-import useBreakpoints from "../components/hooks/useBreakpoints";
 
 export default function Dashboard() {
   const auth = useAuth();
@@ -18,7 +17,6 @@ export default function Dashboard() {
     value: "",
     hasError: false,
   });
-  const breakpoints = useBreakpoints();
 
   const modal = useModal();
 
@@ -62,6 +60,25 @@ export default function Dashboard() {
       console.error(e);
     }
   };
+
+  const DeleteField = async(fieldName:string)=>
+  {
+    const modalRes = await modal?.CreateModal("Delete Field",<h1>Are you sure you want to delete this field?<br />This action is permanent</h1>,"Yes","No");
+    if(!modalRes)return;
+    try {
+      const response: AuthResponseType = await auth?.APIFunctions.DeleteRequest(
+        "/field",
+        { fieldName: fieldName },
+        true
+      );
+      // console.log(response);
+      if (response.status == 200) {
+        setFieldsData(response.data.data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   const gap = "gap-4";
   return (
@@ -208,17 +225,19 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+          {/* <Checklist fieldsData={fieldsData} className="grow w-full lg:w-48 h-96 card p-4"/> */}
           <Checklist fieldsData={fieldsData} className="grow w-full lg:w-48 h-96 card p-4"/>
           {/* {
             !breakpoints.isXl && <Heatmap fieldsData={fieldsData} className="grow w-full lg:w-96 card p-4"/>
           } */}
         </div>
-        <Heatmap fieldsData={fieldsData} className="grow w-full mt-4 card"/>
+        <Heatmap numberOfMonths={13} heatMapData={[546,468,446544646,1234669,6641239,665439,63456639,634634569,634534569,6634569,6634569,634669,634569]} className="grow w-full mt-4 card p-8"/>
         <h1 className="text-2xl sm:text-4xl lg:text-6xl mt-10 font-semibold">
           Progress at a <span className="gradient-text">Glance</span>
         </h1>
         <div className="h-px md:h-1 bg-gradient-to-r from-primary to-accent max-w-96 mt-1 md:mt-4"></div>
         <FieldsBento
+          DeleteField={DeleteField}
           AddFieldFunction={() => {
             setAddFieldModalOpen(true);
           }}
