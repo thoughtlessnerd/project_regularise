@@ -42,7 +42,7 @@ body
 }
 .clock
 {
-  font-family: 'Segment7Standard';
+  /* font-family: 'Segment7Standard'; */
 }
 ::-webkit-scrollbar
 {

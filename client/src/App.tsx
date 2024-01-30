@@ -5,6 +5,7 @@ import SignUpPage from "./pages/SignUpPage"
 import { useAuth } from "./components/context/AuthContext"
 import Dashboard from "./pages/Dashboard"
 import { ModalProvier } from "./components/context/ModalContext"
+import UserSettings from "./pages/UserSettings"
 
 function App() {
   const auth = useAuth();
@@ -22,7 +23,7 @@ function App() {
           ):(
             <Routes>
               <Route path="/" element={<Dashboard/>} />
-              <Route path="/landing" element={<LandingPage/>} />
+              <Route path="/settings" element={<UserSettings/>} />
               <Route path="/*" element={<h1>404</h1>} />
             </Routes>
           )

@@ -7,7 +7,6 @@ import Timer from './Timer';
 function Navbar(props:{className?:string})
 {
     const auth = useAuth();
-    const location = useLocation();
 
     return (
         <>
@@ -24,15 +23,6 @@ function Navbar(props:{className?:string})
                 <nav className={`${props.className} container mx-auto p-8 flex justify-between items-center`}>
                     <h1>LOGO HERE</h1>
                     <Timer />
-                    <div className='gap-4 hidden md:flex'>
-                        {
-                            (location.pathname == '/')?(
-                                <Link to='/landing'><Button className='' color='primary'>Landing Page</Button></Link>
-                            ):(
-                                <Link to='/'><Button className='' color='primary'>Dashboard</Button></Link>
-                            )
-                        }
-                    </div>
                 </nav>
             )
         }
