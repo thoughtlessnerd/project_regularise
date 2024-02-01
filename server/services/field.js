@@ -35,13 +35,6 @@ class fieldService {
         currentDate.setUTCDate(currentDate.getUTCDate() - 1);
       }
 
-      if (currentMonth !== lastMonth) {
-        for (let key in newHistory) {
-          newHistory[key].shift();
-          newHistory[key].push(0);
-        }
-      }
-
       let timeDiff =
         (currentDate.valueOf() - lastTime.valueOf()) / (1000 * 60 * 60 * 24); // changes the time to days
 
@@ -82,6 +75,12 @@ class fieldService {
           }
         }
 
+        if (currentMonth !== lastMonth) {
+          for (let key in newHistory) {
+            newHistory[key].shift();
+            newHistory[key].push(0);
+          }
+        }
         console.log(newFields);
 
         return await this.fieldRepo.update(
