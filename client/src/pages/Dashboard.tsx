@@ -85,9 +85,9 @@ export default function Dashboard() {
     <>
       <div
         className={`${addFieldModalOpen
-          ? "bg-black/80 backdrop-blur-sm"
+          ? "bg-black/80"
           : "pointer-events-none"
-          } duration-500 fixed h-screen w-screen top-0 left-0 z-10 grid place-items-center`}
+          } duration-500 fixed h-screen w-screen top-0 left-0 z-50 grid place-items-center`}
       >
         <div
           onClick={() => {
@@ -198,7 +198,9 @@ export default function Dashboard() {
             !breakpoints.isXl && <Heatmap fieldsData={fieldsData} className="grow w-full lg:w-96 card p-4"/>
           } */}
         </div>
-        <Heatmap numberOfMonths={13} heatMapData={[546, 468, 446544646, 1234669, 6641239, 665439, 63456639, 634634569, 634534569, 6634569, 6634569, 634669, 634569]} className="grow w-full mt-4 card p-8" />
+        <div className="grow w-full mt-4 card p-8">
+          <Heatmap className="mt-6" numberOfMonths={13} heatMapData={[546, 468, 446544646, 1234669, 6641239, 665439, 63456639, 634634569, 634534569, 6634569, 6634569, 634669, 634569]}/>
+        </div>
         <h1 className="text-2xl sm:text-4xl lg:text-6xl mt-10 font-semibold">
           Progress at a <span className="gradient-text">Glance</span>
         </h1>

@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 function Heatmap(props: { heatMapData: number[], className?: string, numberOfMonths: number }) {
   const [heatMapData, setHeatMapData] = useState<number[][]>();
+  const scrollerRef = useRef<HTMLDivElement>(null);
 
   function convertNumToArray(num: number) {
     // convert number to array of 0s and 1s
@@ -22,11 +23,21 @@ function Heatmap(props: { heatMapData: number[], className?: string, numberOfMon
     for (let index = 0; index < props.heatMapData.length; index++) {
       res.push(convertNumToArray(props.heatMapData[index]));
     }
-
     setHeatMapData(res);
   }, [props.heatMapData])
 
+  useEffect(()=>{
+    scrollTo(1)
+  },[heatMapData])
 
+  function scrollTo(val:number)
+  {
+    if(scrollerRef.current)
+    scrollerRef.current?.scrollTo({
+      left: val*scrollerRef.current.scrollWidth,
+      behavior: 'smooth'
+    })
+  }
 
   const monthsFromCurrent = useMemo(() => {
     const currentDate = new Date();
@@ -50,41 +61,63 @@ function Heatmap(props: { heatMapData: number[], className?: string, numberOfMon
     return months.slice(currentMonth).concat(months.slice(0, currentMonth + 1));
   }, [])
 
+  // return<></>
 
   return (
-    <div className={`${props.className} overflow-x-auto`}>
-      <div className="h-full w-full flex gap-4 justify-center items-center">
-        {
-          heatMapData?.map((daysArray, monthIndex) => {
-            if (monthIndex < heatMapData.length - props.numberOfMonths) return <></>;
-            return (
-              <>
-                <div key={monthIndex} className="flex flex-col items-center">
-                  <div className="gap-[1px] grid grid-rows-7 grid-flow-col">
-                    {
-                      daysArray?.map((dayValue, dayIndex) => {
-                        let today = new Date().getDate();
-                        let putCross = (dayIndex != 0 && daysArray[dayIndex - 1] == 1 && daysArray[dayIndex] == 0 && dayIndex != today - 1)
-                        if ((monthIndex == 12 && dayIndex >= today - 1) || dayIndex >= monthsFromCurrent[monthIndex].days) return <></>
-                        return (
-                          <div key={dayIndex} className="bg-background2 border border-text/5 rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square">
-                            <div className={`h-full w-full ${(dayValue == 1) ? "bg-primary" : "hidden"} rounded`} />
-                            <svg xmlns="http://www.w3.org/2000/svg" className={` ${(!putCross) ? "hidden" : ""} w-full h-full scale-[2] text-red`} viewBox="0 0 24 24" fill="none">
-                              <path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              <path d="M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          </div>
-                        )
-                      })
-                    }
+    <div className={`${props.className} relative`}>
+      {
+        scrollerRef.current && (scrollerRef.current.scrollWidth > scrollerRef.current.clientWidth) && 
+        <div className="absolute pointer-events-none w-full h-full z-30 hidden md:flex items-center justify-between">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="-translate-x-full w-6 h-6 duration-150 hover:text-primary hover:scale-105 active:scale-95 pointer-events-auto" onClick={()=>{scrollTo(0)}}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="translate-x-full w-6 h-6 duration-150 hover:text-primary hover:scale-105 active:scale-95 pointer-events-auto" onClick={()=>{scrollTo(1)}}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+          </svg>
+        </div>
+      }
+      <div ref={scrollerRef} className={`overflow-x-auto`}>
+        <div className="h-full w-max flex gap-4 justify-center items-center">
+          {
+            heatMapData?.map((daysArray, monthIndex) => {
+              if (monthIndex < heatMapData.length - props.numberOfMonths) return <></>;
+              return (
+                <>
+                  <div key={monthIndex} className="flex flex-col items-center">
+                    <div className="gap-[1px] grid grid-rows-7 grid-flow-col">
+                      {
+                        daysArray?.map((dayValue, dayIndex) => {
+                          let today = new Date().getDate();
+                          let putCross = (dayIndex != 0 && daysArray[dayIndex - 1] == 1 && daysArray[dayIndex] == 0 && dayIndex != today - 1)
+                          if ((monthIndex == 12 && dayIndex >= today) || dayIndex >= monthsFromCurrent[monthIndex].days)
+                            return (
+                              <>
+                                <div key={dayIndex} className="rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square">
+                                </div>
+                              </>
+                            )
+                          return (
+                            <>
+                              <div key={dayIndex} className="bg-background2 border border-text/5 rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square">
+                                <div className={`h-full w-full ${(dayValue == 1) ? "bg-primary" : "hidden"} rounded`} />
+                                <svg xmlns="http://www.w3.org/2000/svg" className={` ${(!putCross) ? "hidden" : ""} w-full h-full scale-[2] text-red`} viewBox="0 0 24 24" fill="none">
+                                  <path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                  <path d="M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                              </div>
+                            </>
+                          )
+                        })
+                      }
+                    </div>
+                    <h1 className="text-xs mt-4 opacity-70 uppercase hidden lg:block">{monthsFromCurrent[monthIndex].name}</h1>
+                    <h1 className="text-xs mt-4 opacity-70 uppercase lg:hidden">{monthsFromCurrent[monthIndex].name.slice(0, 3)}</h1>
                   </div>
-                  <h1 className="text-xs mt-4 opacity-70 uppercase hidden lg:block">{monthsFromCurrent[monthIndex].name}</h1>
-                  <h1 className="text-xs mt-4 opacity-70 uppercase lg:hidden">{monthsFromCurrent[monthIndex].name.slice(0, 3)}</h1>
-                </div>
-              </>
-            )
-          })
-        }
+                </>
+              )
+            })
+          }
+        </div>
       </div>
     </div>
   );

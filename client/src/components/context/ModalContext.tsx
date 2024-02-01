@@ -64,8 +64,8 @@ export function ModalProvier(props: { children: React.ReactNode }) {
     return (
         <>
             <div
-                className={`${modalOpen ? "bg-black/80 backdrop-blur-sm" : "pointer-events-none"
-                    } duration-500 fixed h-screen w-screen top-0 left-0 z-10 grid place-items-center`}
+                className={`${modalOpen ? "bg-black/80" : "pointer-events-none"
+                    } duration-500 fixed h-screen w-screen top-0 left-0 grid place-items-center z-50`}
             >
                 <div
                     onClick={() => {
