@@ -16,6 +16,7 @@ class fieldService {
       const lastDone = fields.lastDone;
       const history = fields.history;
       const newHistory = { ...history };
+      const update = [];
 
       // Get the current date and time in UTC
       let currentDate = new Date();
@@ -42,10 +43,12 @@ class fieldService {
         const oldFields = fields.fields;
         const newFields = { ...oldFields };
         const ratingChange = 10;
+        let idx = 0;
 
         for (let key in newFields) {
           if (lastDone.includes(key)) {
             streaks[key] += 1;
+            update[idx] = 1;
 
             newFields[key] += Math.floor(
               ratingChange * (Math.random() * 0.5 + 1)
@@ -58,20 +61,26 @@ class fieldService {
             newHistory[key][newHistory[key].length - 1] = elem;
           } else {
             streaks[key] = 0;
+            update[idx] = 0;
             newFields[key] -= Math.floor(
               ratingChange * (Math.random() * 0.5 + 1)
             );
           }
+          idx++;
         }
 
         timeDiff--;
 
         if (timeDiff >= 1) {
+          let idx = 0;
           for (let key in newFields) {
             streaks[key] = 0;
+            update[idx] = 0;
             newFields[key] -= Math.floor(
               ratingChange * (Math.random() * 0.5 + 1) * Math.floor(timeDiff)
             );
+
+            idx++;
           }
         }
 
@@ -91,6 +100,7 @@ class fieldService {
             lastUpdateTime: currentDate,
             history: newHistory,
             streaks,
+            update,
           }
         );
       }

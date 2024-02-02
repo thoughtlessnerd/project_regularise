@@ -21,6 +21,9 @@ const fieldSchema = new mongoose.Schema({
   streaks: {
     type: Object,
   },
+  update: {
+    type: Array,
+  },
 });
 
 module.exports = mongoose.model("Field", fieldSchema);
