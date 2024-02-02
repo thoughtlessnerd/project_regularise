@@ -199,14 +199,14 @@ export default function Dashboard() {
               <h1 className="text-bold text-xs">~Lorem wala insaan</h1>
             </div>
           </div>
-          {/* <Checklist fieldsData={fieldsData} className="grow w-full lg:w-48 h-96 card p-4"/> */}
+          <Checklist fieldsData={fieldsData} className="grow w-full lg:w-48 h-96 card p-4"/>
           <Checklist fieldsData={fieldsData} className="grow w-full lg:w-48 h-96 card p-4" />
           {/* {
             !breakpoints.isXl && <Heatmap fieldsData={fieldsData} className="grow w-full lg:w-96 card p-4"/>
           } */}
         </div>
         <div className="grow w-full mt-4 card p-8">
-          <Heatmap className="mt-6" numberOfMonths={13} heatMapData={[546, 468, 446544646, 1234669, 6641239, 665439, 63456639, 634634569, 634534569, 6634569, 6634569, 634669, 634569]}/>
+          <Heatmap className="mt-6" numberOfMonths={13} heatMapData={fieldsData?.history}/>
         </div>
         <h1 className="text-2xl sm:text-4xl lg:text-6xl mt-10 font-semibold">
           Progress at a <span className="gradient-text">Glance</span>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-function Heatmap(props: { heatMapData: number[], className?: string, numberOfMonths: number }) {
+function Heatmap(props: { heatMapData: {[key:string]:number[]}, className?: string, numberOfMonths: number }) {
   const [heatMapData, setHeatMapData] = useState<number[][]>();
   const scrollerRef = useRef<HTMLDivElement>(null);
 
@@ -17,12 +17,24 @@ function Heatmap(props: { heatMapData: number[], className?: string, numberOfMon
   }
 
   useEffect(() => {
-    // if(!props.heatMapData)return;
-    let res: number[][] = [];
+    if(!props.heatMapData)return;
+    let res: number[][] = Array.from({ length: 13 }, () => Array(32).fill(0));;
 
-    for (let index = 0; index < props.heatMapData.length; index++) {
-      res.push(convertNumToArray(props.heatMapData[index]));
+    for(let fieldName in props.heatMapData)
+    {
+      let currentFieldData: number[][] = props.heatMapData[fieldName].map(val=>convertNumToArray(val));
+
+      for(let i = 0 ; i < 13 ; i++)
+      {
+        for(let j = 0 ; j < 32 ; j ++)
+        {
+          res[i][j] += currentFieldData[i][j];
+        }
+      }
     }
+    // for (let index = 0; index < props.heatMapData.length; index++) {
+    //   res.push(convertNumToArray(props.heatMapData[index]));
+    // }
     setHeatMapData(res);
   }, [props.heatMapData])
 
@@ -63,10 +75,15 @@ function Heatmap(props: { heatMapData: number[], className?: string, numberOfMon
 
   // return<></>
 
+  const numberOfFields = useMemo<number>(()=>{
+    if(!props.heatMapData)return 0;
+    return Object.keys(props.heatMapData).length;
+  },[props.heatMapData])
+
+
   return (
     <div className={`${props.className} relative`}>
       {
-        scrollerRef.current && (scrollerRef.current.scrollWidth > scrollerRef.current.clientWidth) && 
         <div className="absolute pointer-events-none w-full h-full z-30 hidden md:flex items-center justify-between">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="-translate-x-full w-6 h-6 duration-150 hover:text-primary hover:scale-105 active:scale-95 pointer-events-auto" onClick={()=>{scrollTo(0)}}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
@@ -82,8 +99,7 @@ function Heatmap(props: { heatMapData: number[], className?: string, numberOfMon
             heatMapData?.map((daysArray, monthIndex) => {
               if (monthIndex < heatMapData.length - props.numberOfMonths) return <></>;
               return (
-                <>
-                  <div key={monthIndex} className="flex flex-col items-center">
+                  <div key={monthIndex}  className="flex flex-col items-center">
                     <div className="gap-[1px] grid grid-rows-7 grid-flow-col">
                       {
                         daysArray?.map((dayValue, dayIndex) => {
@@ -91,21 +107,17 @@ function Heatmap(props: { heatMapData: number[], className?: string, numberOfMon
                           let putCross = (dayIndex != 0 && daysArray[dayIndex - 1] == 1 && daysArray[dayIndex] == 0 && dayIndex != today - 1)
                           if ((monthIndex == 12 && dayIndex >= today) || dayIndex >= monthsFromCurrent[monthIndex].days)
                             return (
-                              <>
                                 <div key={dayIndex} className="rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square">
                                 </div>
-                              </>
                             )
                           return (
-                            <>
                               <div key={dayIndex} className="bg-background2 border border-text/5 rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square">
-                                <div className={`h-full w-full ${(dayValue == 1) ? "bg-primary" : "hidden"} rounded`} />
+                                <div style={{opacity:(dayValue/numberOfFields)}} className={`h-full w-full ${(dayValue == 1) ? "bg-primary" : "hidden"} rounded`} />
                                 <svg xmlns="http://www.w3.org/2000/svg" className={` ${(!putCross) ? "hidden" : ""} w-full h-full scale-[2] text-red`} viewBox="0 0 24 24" fill="none">
                                   <path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                   <path d="M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                               </div>
-                            </>
                           )
                         })
                       }
@@ -113,7 +125,6 @@ function Heatmap(props: { heatMapData: number[], className?: string, numberOfMon
                     <h1 className="text-xs mt-4 opacity-70 uppercase hidden lg:block">{monthsFromCurrent[monthIndex].name}</h1>
                     <h1 className="text-xs mt-4 opacity-70 uppercase lg:hidden">{monthsFromCurrent[monthIndex].name.slice(0, 3)}</h1>
                   </div>
-                </>
               )
             })
           }

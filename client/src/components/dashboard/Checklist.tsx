@@ -19,11 +19,11 @@ export default function Checklist(props: {
       clearTimeout(timeoutId);
     }
     setTimeoutId(
-      setTimeout(() => {
+      Number(setTimeout(() => {
         // console.log("Uploaded Checklist");
         UploadChecklist();
         setTimeoutId(-1);
-      }, 1000)
+      }, 1000))
     );
   }, [doneFields]);
 
@@ -39,7 +39,7 @@ export default function Checklist(props: {
       }
     });
   }
-
+  //TODO move this to Dashboard
   async function UploadChecklist() {
     let response;
     try {

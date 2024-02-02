@@ -1,9 +1,9 @@
+import { useEffect } from "react";
 import Heatmap from "./Heatmap";
 
 function FieldsBento(props:{fieldsData:any,AddFieldFunction:()=>void,DeleteField(fieldName: string): Promise<void>})
 {
     const fieldCardClass = 'card w-full lg:w-128 grow';
-
     return (
         <div className="flex flex-wrap gap-4 mt-8 mb-24">
             {
@@ -15,8 +15,8 @@ function FieldsBento(props:{fieldsData:any,AddFieldFunction:()=>void,DeleteField
                                     <h1 className="text-xl md:text-3xl font-bold">{key}</h1>
                                     <div className="flex items-center gap-2">
                                         <h1>{props.fieldsData.fields[key]}</h1>
-                                        <svg className="scale-125 -translate-y-[2px]" xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
-                                            <path d="M5 0.5L9.33013 8H0.669873L5 0.5Z" fill="#31FF39"/>
+                                        <svg className={`scale-125 -translate-y-[2px] ${props.fieldsData.update[index]?"text-green-500":"text-red rotate-180"}`} xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
+                                            <path d="M5 0.5L9.33013 8H0.669873L5 0.5Z" fill="currentColor"/>
                                         </svg>
                                     </div>
                                 </div>
@@ -39,7 +39,7 @@ function FieldsBento(props:{fieldsData:any,AddFieldFunction:()=>void,DeleteField
                                     </svg>
                                 </div>
                             </div>
-                            <Heatmap className="mt-6" numberOfMonths={13} heatMapData={props?.fieldsData?.history[key]}/>
+                            <Heatmap className="mt-6" numberOfMonths={13} heatMapData={{[key]:props?.fieldsData?.history[key]}}/>
                         </div>
                     )
                 })
