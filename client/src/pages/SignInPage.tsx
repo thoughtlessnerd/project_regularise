@@ -3,6 +3,7 @@ import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import { useState, FormEvent } from "react";
 import { useAuth } from "../components/context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function SignInPage() {
   const auth = useAuth();
@@ -11,16 +12,22 @@ export default function SignInPage() {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-
+    toast.dismiss();
     let hasError = false;
 
     //Pattern matching
     if (!email.value.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+      toast.error("Please enter a valid email address", {
+        position: "bottom-right",
+      });
       setEmail((prev) => ({ ...prev, hasError: true }));
       hasError = true;
     }
 
     if (!password.value.match(/[\S\s]+[\S]+/)) {
+      toast.error("Please enter a valid password", {
+        position: "bottom-right",
+      });
       setPassword((prev) => ({ ...prev, hasError: true }));
       hasError = true;
     }
