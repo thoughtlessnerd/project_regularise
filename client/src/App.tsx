@@ -6,11 +6,26 @@ import { useAuth } from "./components/context/AuthContext"
 import Dashboard from "./pages/Dashboard"
 import { ModalProvier } from "./components/context/ModalContext"
 import UserSettings from "./pages/UserSettings"
+import { Bounce, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const auth = useAuth();
   return(
     <>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+        />
       <ModalProvier>
         {
           (!auth?.isAuthorized)?(

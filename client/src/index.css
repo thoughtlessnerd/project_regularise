@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root
+{
+  --toastify-color-success: #3A5CD6;
+}
+
 *
 {
   /* outline: solid 2px red; */

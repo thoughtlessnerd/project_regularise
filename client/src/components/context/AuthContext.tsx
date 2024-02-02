@@ -1,6 +1,7 @@
 import React, { useState , useContext, useEffect } from "react";
 import axios from '../../axios';
 import { useNavigate } from "react-router-dom";
+import { Bounce, toast } from "react-toastify";
 
 type UserdataType = {
     token:string,
@@ -80,6 +81,9 @@ export function AuthProvier(props:{children:React.ReactNode})
             if(response.status == 200)
             {
                 saveLoginInfo(response.data);
+                toast.success('Signed In Successfully', {
+                    position: "bottom-right",
+                });
                 return true;
             }
         }
@@ -96,7 +100,10 @@ export function AuthProvier(props:{children:React.ReactNode})
             const response:AuthResponseType = await PostRequest("/user/signup",{email,password,username,name},false);
             if(response.status == 201)
             {
-                alert("Account Created TODO Toast Here");
+                // alert("Account Created TODO Toast Here");
+                toast.success('Account Created Successfully', {
+                    position: "bottom-right",
+                });
                 saveLoginInfo(response.data);
                 return true;
             }
@@ -112,6 +119,9 @@ export function AuthProvier(props:{children:React.ReactNode})
         setUserdata(null);
         setIsAuthorized(false);
         localStorage.removeItem("userdata");
+        toast.success('Signed Out Successfully', {
+            position: "bottom-right",
+        });
         //TODO DeAuth
         navigator('/');
     }
@@ -181,6 +191,9 @@ export function AuthProvier(props:{children:React.ReactNode})
     function HandleErrors(e:any):AuthResponseType
     {
         console.error(e);
+        toast.error(e.response.data.error, {
+            position: "bottom-right",
+        });
         return e.response;
     }
 

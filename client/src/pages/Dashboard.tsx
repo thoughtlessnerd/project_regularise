@@ -8,6 +8,7 @@ import { useModal } from "../components/context/ModalContext";
 import Heatmap from "../components/dashboard/Heatmap";
 import Checklist from "../components/dashboard/Checklist";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Dashboard() {
   const auth = useAuth();
@@ -53,6 +54,9 @@ export default function Dashboard() {
         true
       );
       if (response.status == 201) {
+        toast.success("Field Created Sucessfully", {
+          position: "bottom-right",
+        });
         setFieldsData(response.data.data);
         setNewFieldName((prev) => ({ ...prev, value: "" }));
         setAddFieldModalOpen(false);
@@ -73,6 +77,9 @@ export default function Dashboard() {
       );
       // console.log(response);
       if (response.status == 200) {
+        toast.success("Field Deleted Sucessfully", {
+          position: "bottom-right",
+        });
         setFieldsData(response.data.data);
       }
     } catch (e) {
