@@ -12,11 +12,17 @@ class quoteService {
       let doc = await this.quoteRepo.getQuoteByDate(date);
 
       if (!doc) {
-        let data = await fetch(externalAPI.quote, {
-          headers: {
-            "X-Api-Key": externalAPI.API_NINJAS_Key,
-          },
-        });
+        let length = externalAPI.quoteCategories.length;
+        let data = await fetch(
+          externalAPI.quote +
+            "?category=" +
+            externalAPI.quoteCategories[Math.floor(Math.random() * length)],
+          {
+            headers: {
+              "X-Api-Key": externalAPI.API_NINJAS_Key,
+            },
+          }
+        );
 
         data = await data.json();
 

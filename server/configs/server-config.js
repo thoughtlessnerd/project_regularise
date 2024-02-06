@@ -15,5 +15,6 @@ module.exports = {
   externalAPI: {
     quote: process.env.QUOTE_API,
     API_NINJAS_Key: process.env.API_NINJAS_API_KEY,
+    quoteCategories: process.env.QUOTE_CATEGORIES.split("\n"),
   },
 };
