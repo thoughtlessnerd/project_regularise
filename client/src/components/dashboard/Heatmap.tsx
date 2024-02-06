@@ -103,7 +103,7 @@ function Heatmap(props: { heatMapData: {[key:string]:number[]}, className?: stri
                     <div className="gap-[1px] grid grid-rows-7 grid-flow-col">
                       {
                         daysArray?.map((dayValue, dayIndex) => {
-                          let today = new Date().getDate();
+                          let today = new Date().getDate()-1;
                           let putCross = (dayIndex != 0 && daysArray[dayIndex - 1] == 1 && daysArray[dayIndex] == 0 && dayIndex != today - 1)
                           if ((monthIndex == 12 && dayIndex >= today) || dayIndex >= monthsFromCurrent[monthIndex].days)
                             return (
