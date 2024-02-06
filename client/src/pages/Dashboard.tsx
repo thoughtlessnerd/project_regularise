@@ -156,7 +156,7 @@ export default function Dashboard() {
                 <div className="h-24 w-24 overflow-clip rounded-lg">
                   <img
                     className="h-full w-full object-cover"
-                    src="https://s.yimg.com/ny/api/res/1.2/yaTedpbcw4UXmvfZFFKQJA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTgwMA--/https://media.zenfs.com/en/globenewswire.com/31aca83a1e85b36a57bd93da2fc4e624"
+                    src={`${auth?.profileImage?(auth.profileImage):"https://s.yimg.com/ny/api/res/1.2/yaTedpbcw4UXmvfZFFKQJA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTgwMA--/https://media.zenfs.com/en/globenewswire.com/31aca83a1e85b36a57bd93da2fc4e624"}`}
                     alt=""
                   />
                 </div>
@@ -188,7 +188,7 @@ export default function Dashboard() {
                 </div>
               </div>
               <Link className="w-full" to={"/settings"}>
-                <Button className="w-full" color={"primary"}>User Settings</Button>
+                <Button className="w-full" color={"primary"}>Settings</Button>
               </Link>
             </div>
             <div className="grow card p-4 flex flex-col justify-between">

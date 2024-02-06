@@ -5,7 +5,7 @@ import SignUpPage from "./pages/SignUpPage"
 import { useAuth } from "./components/context/AuthContext"
 import Dashboard from "./pages/Dashboard"
 import { ModalProvier } from "./components/context/ModalContext"
-import UserSettings from "./pages/UserSettings"
+import Settings from "./pages/Settings"
 import { Bounce, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -38,7 +38,7 @@ function App() {
           ):(
             <Routes>
               <Route path="/" element={<Dashboard/>} />
-              <Route path="/settings" element={<UserSettings/>} />
+              <Route path="/settings" element={<Settings/>} />
               <Route path="/*" element={<h1>404</h1>} />
             </Routes>
           )
