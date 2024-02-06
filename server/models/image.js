@@ -8,6 +8,7 @@ const imageSchema = new mongoose.Schema({
   },
   profile: {
     type: String,
+    maxLength: [15000, "image is too big"],
   },
 });
 
