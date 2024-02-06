@@ -18,9 +18,9 @@ type AuthContextType = {
         SignIn:(email:string,password:string)=>Promise<boolean>,
         SignUp:(email:string,password:string,name:string,username:string)=>Promise<boolean>,
         SignOut:()=>void,
-        PostRequest:(url:string,body:any,needsToken:boolean,params?:any)=>Promise<any>,
-        DeleteRequest:(url:string,body:any,needsToken:boolean,params?:any)=>Promise<any>,
-        GetRequest:(url:string,needsToken:boolean,params?:any)=>Promise<any>
+        PostRequest:(url:string,body:any,needsToken:boolean)=>Promise<any>,
+        DeleteRequest:(url:string,body:any,needsToken:boolean)=>Promise<any>,
+        GetRequest:(url:string,needsToken:boolean)=>Promise<any>
     },
 }
 
@@ -128,18 +128,18 @@ export function AuthProvier(props:{children:React.ReactNode})
         //TODO DeAuth
         navigator('/');
     }
-    async function GetRequest(url:string,sendToken:boolean,params?:any)
+    async function GetRequest(url:string,sendToken:boolean)
     {
         let response:AuthResponseType;
         try
         {
             if(sendToken)
             {
-                response = await axios.get(url,{headers:{authorization: `${userdata?.token}`},params:params})
+                response = await axios.get(url,{headers:{authorization: `${userdata?.token}`}})
             }
             else
             {
-                response = await axios.get(url,{params:params});
+                response = await axios.get(url);
             }
         }
         catch(e:any)
@@ -148,7 +148,7 @@ export function AuthProvier(props:{children:React.ReactNode})
         }
         return response;
     }
-    async function PostRequest(url:string,body:any,needsToken:boolean,params?:any)
+    async function PostRequest(url:string,body:any,needsToken:boolean)
     {
         let response:AuthResponseType;
 
@@ -156,11 +156,11 @@ export function AuthProvier(props:{children:React.ReactNode})
         {
             if(needsToken && isAuthorized)
             {
-                response = await axios.post(url,body,{headers:{authorization: `${userdata?.token}`},params:params});
+                response = await axios.post(url,body,{headers:{authorization: `${userdata?.token}`}},);
             }
             else
             {
-                response = await axios.post(url,body,{params:params});
+                response = await axios.post(url,body);
             }   
         }
         catch(e:any)
@@ -169,7 +169,7 @@ export function AuthProvier(props:{children:React.ReactNode})
         }
         return response;
     }
-    async function DeleteRequest(url:string,body:any,needsToken:boolean,params?:any)
+    async function DeleteRequest(url:string,body:any,needsToken:boolean)
     {
         let response:AuthResponseType;
 
@@ -181,7 +181,7 @@ export function AuthProvier(props:{children:React.ReactNode})
             }
             else
             {
-                response = await axios.post(url,body,{params:params});
+                response = await axios.post(url,{data:body});
             }   
         }
         catch(e:any)
