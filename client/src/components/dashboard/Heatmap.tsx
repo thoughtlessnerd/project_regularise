@@ -107,7 +107,8 @@ function Heatmap(props: { heatMapData: {[key:string]:number[]}, className?: stri
                           let putCross = (dayIndex != 0 && daysArray[dayIndex - 1] == 1 && daysArray[dayIndex] == 0 && dayIndex != today - 1)
                           if ((monthIndex == 12 && dayIndex >= today) || dayIndex >= monthsFromCurrent[monthIndex].days)
                             return (
-                                <div key={dayIndex} className="rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square">
+                                <div key={dayIndex} className={`${dayIndex==today?"bg-green-600":""} rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square`}>
+                                  
                                 </div>
                             )
                           return (
