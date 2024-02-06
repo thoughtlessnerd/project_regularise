@@ -9,10 +9,12 @@ import Heatmap from "../components/dashboard/Heatmap";
 import Checklist from "../components/dashboard/Checklist";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import DailyQuote from "../components/dashboard/DailyQuote";
 
 export default function Dashboard() {
   const auth = useAuth();
 
+  const [profileImage,setProfileImage] = useState<string>();
   const [fieldsData, setFieldsData] = useState<any>();
   const [addFieldModalOpen, setAddFieldModalOpen] = useState<boolean>(false);
   const [newFieldName, setNewFieldName] = useState<InputState>({
@@ -24,6 +26,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     GetFields();
+    GetProfileImage();
   }, []);
 
   const GetFields = async () => {
@@ -84,6 +87,14 @@ export default function Dashboard() {
       }
     } catch (e) {
       console.error(e);
+    }
+  }
+  async function GetProfileImage()
+  {
+    const response = await auth?.APIFunctions?.GetRequest('/image',true);
+    if(response.status == 200)
+    {
+      setProfileImage(response.data.data);
     }
   }
 
@@ -156,7 +167,7 @@ export default function Dashboard() {
                 <div className="h-24 w-24 overflow-clip rounded-lg">
                   <img
                     className="h-full w-full object-cover"
-                    src="https://s.yimg.com/ny/api/res/1.2/yaTedpbcw4UXmvfZFFKQJA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTgwMA--/https://media.zenfs.com/en/globenewswire.com/31aca83a1e85b36a57bd93da2fc4e624"
+                    src={`${profileImage?(profileImage):"https://s.yimg.com/ny/api/res/1.2/yaTedpbcw4UXmvfZFFKQJA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTgwMA--/https://media.zenfs.com/en/globenewswire.com/31aca83a1e85b36a57bd93da2fc4e624"}`}
                     alt=""
                   />
                 </div>
@@ -188,15 +199,11 @@ export default function Dashboard() {
                 </div>
               </div>
               <Link className="w-full" to={"/settings"}>
-                <Button className="w-full" color={"primary"}>User Settings</Button>
+                <Button className="w-full" color={"primary"}>Settings</Button>
               </Link>
             </div>
             <div className="grow card p-4 flex flex-col justify-between">
-              <h1 className="font-bold">Today's Daily Quote</h1>
-              <p className="opacity-90 text-pretty text-sm">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium dolore perspiciatis reprehenderit inventore iusto doloribus aperiam ipsam perferendis a iste.
-              </p>
-              <h1 className="text-bold text-xs">~Lorem wala insaan</h1>
+              <DailyQuote />
             </div>
           </div>
           <Checklist fieldsData={fieldsData} className="grow w-full lg:w-48 h-96 card p-4"/>

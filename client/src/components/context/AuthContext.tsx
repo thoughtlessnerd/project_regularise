@@ -1,12 +1,13 @@
 import React, { useState , useContext, useEffect } from "react";
 import axios from '../../axios';
 import { useNavigate } from "react-router-dom";
-import { Bounce, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 type UserdataType = {
     token:string,
     username:string,
     name:string,
+    email:string,
 } | null;
 
 type AuthContextType = {
@@ -20,7 +21,7 @@ type AuthContextType = {
         PostRequest:(url:string,body:any,needsToken:boolean,params?:any)=>Promise<any>,
         DeleteRequest:(url:string,body:any,needsToken:boolean,params?:any)=>Promise<any>,
         GetRequest:(url:string,needsToken:boolean,params?:any)=>Promise<any>
-    }
+    },
 }
 
 const AuthContext = React.createContext<AuthContextType | null>(null);
@@ -34,7 +35,8 @@ export function AuthProvier(props:{children:React.ReactNode})
 {
     const navigator = useNavigate();
     const [isAuthorized,setIsAuthorized] = useState(false);
-    const [userdata,setUserdata] = useState<UserdataType>({name:"",token:"",username:""});
+    const [profileImage,setprofileImage] = useState("");
+    const [userdata,setUserdata] = useState<UserdataType>({name:"",token:"",username:"",email:""});
 
     useEffect(()=>{
         let local = localStorage.getItem("userdata");
@@ -59,12 +61,13 @@ export function AuthProvier(props:{children:React.ReactNode})
     const value = {
         userdata,
         isAuthorized,//is signed in
-        APIFunctions
+        APIFunctions,
+        profileImage
     }
 
     return  <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>
 
-    function saveLoginInfo(response:AuthResponseType)
+    async function saveLoginInfo(response:AuthResponseType)
     {
         setUserdata(response.data);
         setIsAuthorized(true);
@@ -190,10 +193,13 @@ export function AuthProvier(props:{children:React.ReactNode})
 
     function HandleErrors(e:any):AuthResponseType
     {
-        console.error(e);
-        toast.error(e.response.data.error, {
-            position: "bottom-right",
-        });
+        console.error(e.response);
+        if(e.response.data.error)
+        {
+            toast.error(e.response.data.error, {
+                position: "bottom-right",
+            });
+        }
         return e.response;
     }
 
