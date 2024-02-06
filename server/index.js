@@ -3,11 +3,14 @@ const cors = require("cors");
 const { port } = require("./configs/server-config");
 const { connectToDatabase } = require("./configs/database-config");
 const routes = require("./routes");
+const bodyParser = require("body-parser");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use(bodyParser.json({ limit: "50mb" }));
 
 app.use("/api", routes);
 
