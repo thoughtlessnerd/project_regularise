@@ -2,6 +2,7 @@ const express = require("express");
 const userController = require("../../controllers/user");
 const fieldController = require("../../controllers/field");
 const imageController = require("../../controllers/image");
+const quoteController = require("../../controllers/quote");
 const { isAuthenticated } = require("../../middlewares/auth-middleware");
 
 const router = express.Router();
@@ -21,5 +22,7 @@ router.get("/image", isAuthenticated, imageController.getProfileImage);
 router.post("/image", isAuthenticated, imageController.uploadProfileImage);
 router.put("/image", isAuthenticated, imageController.updateProfileImage);
 router.delete("/image", isAuthenticated, imageController.deleteProfileImage);
+
+router.get("/quote", quoteController.getQuoteForToday);
 
 module.exports = router;

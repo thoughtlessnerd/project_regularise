@@ -12,4 +12,8 @@ module.exports = {
     expiration: process.env.JWT_EXPIRY,
   },
   defaultRating: 800,
+  externalAPI: {
+    quote: process.env.QUOTE_API,
+    API_NINJAS_Key: process.env.API_NINJAS_API_KEY,
+  },
 };
