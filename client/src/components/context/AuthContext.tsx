@@ -22,7 +22,6 @@ type AuthContextType = {
         DeleteRequest:(url:string,body:any,needsToken:boolean,params?:any)=>Promise<any>,
         GetRequest:(url:string,needsToken:boolean,params?:any)=>Promise<any>
     },
-    profileImage:string
 }
 
 const AuthContext = React.createContext<AuthContextType | null>(null);
@@ -39,15 +38,6 @@ export function AuthProvier(props:{children:React.ReactNode})
     const [profileImage,setprofileImage] = useState("");
     const [userdata,setUserdata] = useState<UserdataType>({name:"",token:"",username:"",email:""});
 
-    //TODO refetch when user uploads a new image
-    useEffect(()=>{
-        if(!userdata)return
-        GetProfileImage().then((val:string)=>{
-            localStorage.setItem("profileImage",val);
-            setprofileImage(val);
-        });
-    },[userdata])
-
     useEffect(()=>{
         let local = localStorage.getItem("userdata");
         if(local)
@@ -56,11 +46,6 @@ export function AuthProvier(props:{children:React.ReactNode})
             //TODO Token Validation
             setUserdata(userdata);
             setIsAuthorized(true);
-        }
-        local = localStorage.getItem("profileImage");
-        if(local)
-        {
-            setprofileImage(local);
         }
     },[])
 
@@ -88,12 +73,6 @@ export function AuthProvier(props:{children:React.ReactNode})
         setIsAuthorized(true);
         localStorage.setItem("userdata",JSON.stringify(response.data));
         navigator('/');
-    }
-
-    async function GetProfileImage()
-    {
-        const response = await GetRequest('/image',true);
-        return response.data.data
     }
 
     async function SignIn(email:string,password:string):Promise<boolean>
