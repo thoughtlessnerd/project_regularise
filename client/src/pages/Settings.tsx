@@ -20,7 +20,6 @@ export default function Settings()
 
   useEffect(()=>{
     if(!auth?.userdata)return;
-    console.log("HALP")
     setInputState({
       name:auth.userdata.name,
       username:auth.userdata.username,
