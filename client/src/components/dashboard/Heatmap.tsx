@@ -122,16 +122,22 @@ function Heatmap(props: {
           </svg>
         </div>
       }
-      <div ref={scrollerRef} className={`overflow-x-auto`}>
+      <div ref={scrollerRef} className={`overflow-x-auto p-4`}>
+        {" "}
+        {/* TODO added p-4 here which fixes overflow issue of tooltip but increases white space*/}
         <div className="h-full w-max flex gap-4 justify-center items-center">
           {heatMapData?.map((daysArray, monthIndex) => {
             if (monthIndex < heatMapData.length - props.numberOfMonths)
               return <></>;
             return (
               <div key={monthIndex} className="flex flex-col items-center">
-                <div className="gap-[1px] grid grid-rows-7 grid-flow-col">
+                <div className="gap-[1px] grid grid-rows-7 grid-flow-col cursor-none">
                   {daysArray?.map((dayValue, dayIndex) => {
                     let today = new Date().getDate() - 1;
+                    // let lastVal = 0;
+                    // if (monthIndex != 0)
+                    //   lastVal = monthsFromCurrent[monthIndex - 1].days % 7;
+                    // console.log(lastVal);
                     let putCross =
                       dayIndex != 0 &&
                       daysArray[dayIndex - 1] == 1 &&
@@ -152,8 +158,16 @@ function Heatmap(props: {
                     return (
                       <div
                         key={dayIndex}
-                        className="bg-background2 border border-text/5 rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square"
+                        className={
+                          // (dayIndex == 0 && monthIndex == 10
+                          //   ? `row-start-[3] `
+                          //   : "") +
+                          "bg-background2 border duration-100 hover:border-text border-text/5 rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square group relative cursor-none flex justify-center items-center"
+                        }
                       >
+                        <span className="absolute p-4 origin-center delay-150 transition-all duration-100 z-50 bg-primary rounded-sm hover:text-white group-hover:opacity-100 group-hover:scale-100 scale-0 pointer-events-none opacity-0 h-full w-full text-center flex justify-center items-center">
+                          <span className="">{dayIndex + 1}</span>
+                        </span>
                         <div
                           style={{ opacity: dayValue / numberOfFields }}
                           className={`h-full w-full ${

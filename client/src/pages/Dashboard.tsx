@@ -14,7 +14,7 @@ import DailyQuote from "../components/dashboard/DailyQuote";
 export default function Dashboard() {
   const auth = useAuth();
 
-  const [profileImage,setProfileImage] = useState<string>();
+  const [profileImage, setProfileImage] = useState<string>();
   const [fieldsData, setFieldsData] = useState<any>();
   const [addFieldModalOpen, setAddFieldModalOpen] = useState<boolean>(false);
   const [newFieldName, setNewFieldName] = useState<InputState>({
@@ -70,7 +70,16 @@ export default function Dashboard() {
   };
 
   const DeleteField = async (fieldName: string) => {
-    const modalRes = await modal?.CreateModal("Delete Field", <h1>Are you sure you want to delete this field?<br />This action is permanent</h1>, "Yes", "No");
+    const modalRes = await modal?.CreateModal(
+      "Delete Field",
+      <h1>
+        Are you sure you want to delete this field?
+        <br />
+        This action is permanent
+      </h1>,
+      "Yes",
+      "No"
+    );
     if (!modalRes) return;
     try {
       const response: AuthResponseType = await auth?.APIFunctions.DeleteRequest(
@@ -88,12 +97,10 @@ export default function Dashboard() {
     } catch (e) {
       console.error(e);
     }
-  }
-  async function GetProfileImage()
-  {
-    const response = await auth?.APIFunctions?.GetRequest('/image',true);
-    if(response.status == 200)
-    {
+  };
+  async function GetProfileImage() {
+    const response = await auth?.APIFunctions?.GetRequest("/image", true);
+    if (response.status == 200) {
       setProfileImage(response.data.data);
     }
   }
@@ -102,10 +109,9 @@ export default function Dashboard() {
   return (
     <>
       <div
-        className={`${addFieldModalOpen
-          ? "bg-black/80"
-          : "pointer-events-none"
-          } duration-500 fixed h-screen w-screen top-0 left-0 z-50 grid place-items-center`}
+        className={`${
+          addFieldModalOpen ? "bg-black/80" : "pointer-events-none"
+        } duration-500 fixed h-screen w-screen top-0 left-0 z-50 grid place-items-center`}
       >
         <div
           onClick={() => {
@@ -114,8 +120,9 @@ export default function Dashboard() {
           className={`absolute w-full h-full -z-10`}
         ></div>
         <div
-          className={`card max-w-lg w-full p-4 lg:p-8 ${addFieldModalOpen ? "" : "scale-125 opacity-0"
-            }`}
+          className={`card max-w-lg w-full p-4 lg:p-8 ${
+            addFieldModalOpen ? "" : "scale-125 opacity-0"
+          }`}
         >
           <div className="flex justify-between items-center">
             <h1 className="text-2xl md:text-4xl font-medium">Add Field</h1>
@@ -167,7 +174,11 @@ export default function Dashboard() {
                 <div className="h-24 w-24 overflow-clip rounded-lg">
                   <img
                     className="h-full w-full object-cover"
-                    src={`${profileImage?(profileImage):"https://s.yimg.com/ny/api/res/1.2/yaTedpbcw4UXmvfZFFKQJA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTgwMA--/https://media.zenfs.com/en/globenewswire.com/31aca83a1e85b36a57bd93da2fc4e624"}`}
+                    src={`${
+                      profileImage
+                        ? profileImage
+                        : "https://s.yimg.com/ny/api/res/1.2/yaTedpbcw4UXmvfZFFKQJA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTgwMA--/https://media.zenfs.com/en/globenewswire.com/31aca83a1e85b36a57bd93da2fc4e624"
+                    }`}
                     alt=""
                   />
                 </div>
@@ -179,7 +190,14 @@ export default function Dashboard() {
                   <svg
                     className="duration-150 hover:text-red cursor-pointer hover:scale-110 active:scale-95"
                     onClick={async () => {
-                      if (await modal?.CreateModal("Sign Out", <h1>Are you sure you want to Sign Out?</h1>, "Yes", "No"))
+                      if (
+                        await modal?.CreateModal(
+                          "Sign Out",
+                          <h1>Are you sure you want to Sign Out?</h1>,
+                          "Yes",
+                          "No"
+                        )
+                      )
                         auth?.APIFunctions.SignOut();
                     }}
                     xmlns="http://www.w3.org/2000/svg"
@@ -199,21 +217,29 @@ export default function Dashboard() {
                 </div>
               </div>
               <Link className="w-full" to={"/settings"}>
-                <Button className="w-full" color={"primary"}>Settings</Button>
+                <Button className="w-full" color={"primary"}>
+                  Settings
+                </Button>
               </Link>
             </div>
             <div className="grow card p-4 flex flex-col justify-between">
               <DailyQuote />
             </div>
           </div>
-          <Checklist fieldsData={fieldsData} className="grow w-full lg:w-48 h-96 card p-4"/>
-          <Checklist fieldsData={fieldsData} className="grow w-full lg:w-48 h-96 card p-4" />
+          <Checklist
+            fieldsData={fieldsData}
+            className="grow w-full lg:w-48 h-96 card p-4"
+          />
+          <Checklist
+            fieldsData={fieldsData}
+            className="grow w-full lg:w-48 h-96 card p-4"
+          />
           {/* {
             !breakpoints.isXl && <Heatmap fieldsData={fieldsData} className="grow w-full lg:w-96 card p-4"/>
           } */}
         </div>
         <div className="grow w-full mt-4 card p-8">
-          <Heatmap className="mt-6" numberOfMonths={13} heatMapData={fieldsData?.history}/>
+          <Heatmap numberOfMonths={13} heatMapData={fieldsData?.history} />
         </div>
         <h1 className="text-2xl sm:text-4xl lg:text-6xl mt-10 font-semibold">
           Progress at a <span className="gradient-text">Glance</span>
