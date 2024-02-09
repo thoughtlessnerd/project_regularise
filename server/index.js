@@ -9,7 +9,7 @@ const app = express();
 
 app.use(cors());
 
-app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.json({ limit: "500kb" }));
 
 app.use("/api", routes);
 

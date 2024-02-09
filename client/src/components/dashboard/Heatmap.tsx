@@ -122,7 +122,7 @@ function Heatmap(props: {
           </svg>
         </div>
       }
-      <div ref={scrollerRef} className={`overflow-x-auto p-4`}>
+      <div ref={scrollerRef} className={`overflow-x-auto overflow-y-visible p-4`}>
         {" "}
         {/* TODO added p-4 here which fixes overflow issue of tooltip but increases white space*/}
         <div className="h-full w-max flex gap-4 justify-center items-center">
@@ -131,7 +131,7 @@ function Heatmap(props: {
               return <></>;
             return (
               <div key={monthIndex} className="flex flex-col items-center">
-                <div className="gap-[1px] grid grid-rows-7 grid-flow-col cursor-none">
+                <div className="gap-[1px] cursor-noneTODO grid grid-rows-7 grid-flow-col">
                   {daysArray?.map((dayValue, dayIndex) => {
                     let today = new Date().getDate() - 1;
                     // let lastVal = 0;
@@ -162,10 +162,10 @@ function Heatmap(props: {
                           // (dayIndex == 0 && monthIndex == 10
                           //   ? `row-start-[3] `
                           //   : "") +
-                          "bg-background2 border duration-100 hover:border-text border-text/5 rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square group relative cursor-none flex justify-center items-center"
+                          "bg-background2 border duration-100 hover:border-text/50 border-text/5 rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square group relative flex justify-center items-center"
                         }
                       >
-                        <span className="absolute p-4 origin-center delay-150 transition-all duration-100 z-50 bg-primary rounded-sm hover:text-white group-hover:opacity-100 group-hover:scale-100 scale-0 pointer-events-none opacity-0 h-full w-full text-center flex justify-center items-center">
+                        <span className={`absolute select-none p-4 origin-center transition-all duration-100 z-50 bg-primary rounded-sm hover:text-white group-hover:opacity-100 group-hover:scale-100 scale-0 pointer-events-none opacity-0 h-full w-full text-center flex justify-center items-center ${dayIndex%7>=3?"-translate-y-full":"translate-y-full"}`}>
                           <span className="">{dayIndex + 1}</span>
                         </span>
                         <div
