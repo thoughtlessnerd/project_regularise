@@ -55,8 +55,11 @@ function Heatmap(props: {
 
   const monthsFromCurrent = useMemo(() => {
     const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth();
-
+    const isLeapYear = (year:number) => {
+      return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+    };
     const months = [
       { name: "January", number: 1, days: 31 },
       { name: "February", number: 2, days: 28 }, // Note: Leap year handling is not included for simplicity TODO
@@ -71,9 +74,29 @@ function Heatmap(props: {
       { name: "November", number: 11, days: 30 },
       { name: "December", number: 12, days: 31 },
     ];
-
+    let ring = (months.slice(currentMonth).concat(months.slice(0, currentMonth + 1)))
+    if(ring[12].name == "February")
+    {
+      ring[12] = {...ring[12],days:isLeapYear(currentYear) ? 29 : 28}
+      ring[0] = {...ring[0],days:isLeapYear(currentYear-1) ? 29 : 28}
+    }
     return months.slice(currentMonth).concat(months.slice(0, currentMonth + 1));
   }, []);
+
+  function getFirstDayOfPreviousYearMonth() {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+
+    // Calculate the previous year
+    const previousYear = currentYear - 1;
+
+    // Create a new Date object for the first day of the current month of the previous year
+    const firstDayOfPreviousYearMonth = new Date(previousYear, currentMonth, 1);
+
+    // getDay() returns the day of the week (0 = Sunday, 1 = Monday, ...)
+    return firstDayOfPreviousYearMonth.getDay();
+  }
 
   // return<></>
 
@@ -122,94 +145,106 @@ function Heatmap(props: {
           </svg>
         </div>
       }
-      <div ref={scrollerRef} className={`overflow-x-auto overflow-y-visible p-4`}>
+      <div
+        ref={scrollerRef}
+        className={`overflow-x-auto overflow-y-visible p-4`}
+      >
         {" "}
         {/* TODO added p-4 here which fixes overflow issue of tooltip but increases white space*/}
         <div className="h-full w-max flex gap-4 justify-center items-center">
-          {heatMapData?.map((daysArray, monthIndex) => {
-            if (monthIndex < heatMapData.length - props.numberOfMonths)
-              return <></>;
-            return (
-              <div key={monthIndex} className="flex flex-col items-center">
-                <div className="gap-[1px] cursor-noneTODO grid grid-rows-7 grid-flow-col">
-                  {daysArray?.map((dayValue, dayIndex) => {
-                    let today = new Date().getDate() - 1;
-                    // let lastVal = 0;
-                    // if (monthIndex != 0)
-                    //   lastVal = monthsFromCurrent[monthIndex - 1].days % 7;
-                    // console.log(lastVal);
-                    let putCross =
-                      dayIndex != 0 &&
-                      daysArray[dayIndex - 1] == 1 &&
-                      daysArray[dayIndex] == 0 &&
-                      dayIndex != today;
-                    if (
-                      (monthIndex == 12 && dayIndex >= today) ||
-                      dayIndex >= monthsFromCurrent[monthIndex].days
-                    )
+          {(() => {
+            let offsetterIndex = getFirstDayOfPreviousYearMonth() - 1;
+
+            return heatMapData?.map((daysArray, monthIndex) => {
+              if (monthIndex < heatMapData.length - props.numberOfMonths)
+                return <></>;
+              return (
+                <div key={monthIndex} className="flex flex-col items-center">
+                  <div className="gap-[1px] grid grid-rows-7 grid-flow-col">
+                    {daysArray?.map((dayValue, dayIndex) => {
+                      let today = new Date().getDate() - 1;
+                      // let lastVal = 0;
+                      // if (monthIndex != 0)
+                      //   lastVal = monthsFromCurrent[monthIndex - 1].days % 7;
+                      // console.log(lastVal);
+                      let putCross =
+                        dayIndex != 0 &&
+                        daysArray[dayIndex - 1] == 1 &&
+                        daysArray[dayIndex] == 0 &&
+                        dayIndex != today;
+                      if (
+                        (monthIndex == 12 && dayIndex >= today) ||
+                        dayIndex >= monthsFromCurrent[monthIndex].days
+                      )
+                        return (
+                          <div
+                            key={dayIndex}
+                            className={`${
+                              dayIndex == today ? "bg-green-600" : ""
+                            } rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square`}
+                          ></div>
+                        );
+                        offsetterIndex++;
                       return (
                         <div
+                          style={{ gridRowStart: dayIndex == 0 ? (offsetterIndex%7+1) : "" }}
                           key={dayIndex}
-                          className={`${
-                            dayIndex == today ? "bg-green-600" : ""
-                          } rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square`}
-                        ></div>
-                      );
-                    return (
-                      <div
-                        key={dayIndex}
-                        className={
-                          // (dayIndex == 0 && monthIndex == 10
-                          //   ? `row-start-[3] `
-                          //   : "") +
-                          "bg-background2 border duration-100 hover:border-text/50 border-text/5 rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square group relative flex justify-center items-center"
-                        }
-                      >
-                        <span className={`absolute select-none p-4 origin-center transition-all duration-100 z-50 bg-primary rounded-sm hover:text-white group-hover:opacity-100 group-hover:scale-100 scale-0 pointer-events-none opacity-0 h-full w-full text-center flex justify-center items-center ${dayIndex%7>=3?"-translate-y-full":"translate-y-full"}`}>
-                          <span className="">{dayIndex + 1}</span>
-                        </span>
-                        <div
-                          style={{ opacity: dayValue / numberOfFields }}
-                          className={`h-full w-full ${
-                            dayValue != 0 ? "bg-primary" : "hidden"
-                          } rounded`}
-                        />
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className={` ${
-                            !putCross ? "hidden" : ""
-                          } w-full h-full scale-[2] text-red`}
-                          viewBox="0 0 24 24"
-                          fill="none"
+                          className={
+                            "bg-background2 border duration-100 hover:border-text/50 border-text/5 rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square group relative flex justify-center items-center"
+                          }
                         >
-                          <path
-                            d="M18 6L6 18"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                          <span
+                            className={`absolute select-none p-4 origin-center transition-all duration-100 z-50 bg-primary rounded-sm group-hover:opacity-100 group-hover:scale-100 scale-0 pointer-events-none opacity-0 h-full w-full text-center flex justify-center items-center ${
+                              offsetterIndex % 7 >= 3
+                                ? "-translate-y-full"
+                                : "translate-y-full"
+                            }`}
+                          >
+                            <span className="">{dayIndex + 1}</span>
+                          </span>
+                          <div
+                            style={{ opacity: dayValue / numberOfFields }}
+                            className={`h-full w-full ${
+                              dayValue != 0 ? "bg-primary" : "hidden"
+                            } rounded`}
                           />
-                          <path
-                            d="M6 6L18 18"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </div>
-                    );
-                  })}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className={` ${
+                              !putCross ? "hidden" : ""
+                            } w-full h-full scale-[2] text-red`}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <path
+                              d="M18 6L6 18"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M6 6L18 18"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <h1 className="text-xs mt-4 opacity-70 uppercase hidden lg:block">
+                    {monthsFromCurrent[monthIndex].name}
+                  </h1>
+                  <h1 className="text-xs mt-4 opacity-70 uppercase lg:hidden">
+                    {monthsFromCurrent[monthIndex].name.slice(0, 3)}
+                  </h1>
                 </div>
-                <h1 className="text-xs mt-4 opacity-70 uppercase hidden lg:block">
-                  {monthsFromCurrent[monthIndex].name}
-                </h1>
-                <h1 className="text-xs mt-4 opacity-70 uppercase lg:hidden">
-                  {monthsFromCurrent[monthIndex].name.slice(0, 3)}
-                </h1>
-              </div>
-            );
-          })}
+              );
+            });
+          })()}
         </div>
       </div>
     </div>
