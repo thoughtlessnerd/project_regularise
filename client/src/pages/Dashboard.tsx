@@ -222,7 +222,7 @@ export default function Dashboard() {
                 </Button>
               </Link>
             </div>
-            <div className="grow card p-4 flex flex-col justify-between">
+            <div className="grow card p-4 flex flex-col justify-between overflow-y-scroll">
               <DailyQuote />
             </div>
           </div>
