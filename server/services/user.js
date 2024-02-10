@@ -47,6 +47,15 @@ class userService {
       throw error;
     }
   };
+  updateUser = async (data) => {
+    try {
+      const user = await this.userRepository.updateUserByID(data.userID, data);
+      delete user._doc.password;
+      return user._doc;
+    } catch (error) {
+      throw error;
+    }
+  };
 }
 
 module.exports = userService;

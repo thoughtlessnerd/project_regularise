@@ -41,6 +41,20 @@ class userController {
       res.status(400).json({ error: error.message });
     }
   };
+  updateUser = async (req, res) => {
+    try {
+      const data = {
+        name: req.body.name,
+        email: req.body.email,
+        username: req.body.username,
+        userID: req.user,
+      };
+      const user = await this.service.updateUser(data);
+      res.status(200).json({ message: "updated", success: true, data: user });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
 }
 
 module.exports = new userController();

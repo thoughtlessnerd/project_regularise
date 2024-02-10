@@ -14,6 +14,20 @@ class userRepo extends crudRepo {
       throw error;
     }
   }
+  async updateUserByID(id, data) {
+    try {
+      const doc = await this.model.findOneAndUpdate({ userID: id }, data, {
+        new: true,
+      });
+      if (!doc) {
+        throw new Error("User not found");
+      }
+      return doc;
+    } catch (error) {
+      console.log("error in user repo" + error);
+      throw error;
+    }
+  }
   async getUserByEmail(email) {
     try {
       const doc = await this.model.findOne({ email });
