@@ -14,6 +14,8 @@ router.get("/user", isAuthenticated, userController.getUser);
 
 router.patch("/user", isAuthenticated, userController.updateUser);
 
+router.patch("/user/password", isAuthenticated, userController.updatePassword);
+
 router.get("/field", isAuthenticated, fieldController.getFields);
 router.post("/field/create", isAuthenticated, fieldController.createField);
 // router.post("/field/create", isAuthenticated, fieldController.createFields);

@@ -56,6 +56,21 @@ class userService {
       throw error;
     }
   };
+  updatePassword = async (data) => {
+    try {
+      const user = await this.userRepository.getUserById(data.userID);
+      const isMatched = await user.comparePassword(data.oldPassword);
+      if (!isMatched) {
+        throw new Error("Password not matched");
+      }
+      user.password = data.newPassword;
+      await user.save();
+      delete user._doc.password;
+      return user._doc;
+    } catch (error) {
+      throw error;
+    }
+  };
 }
 
 module.exports = userService;

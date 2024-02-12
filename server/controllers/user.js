@@ -55,6 +55,22 @@ class userController {
       res.status(400).json({ error: error.message });
     }
   };
+  updatePassword = async (req, res) => {
+    try {
+      const data = {
+        oldPassword: req.body.oldPassword,
+        newPassword: req.body.newPassword,
+        userID: req.user,
+      };
+      const user = await this.service.updatePassword(data);
+
+      res
+        .status(200)
+        .json({ message: "password updated", success: true, data: user });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
 }
 
 module.exports = new userController();
