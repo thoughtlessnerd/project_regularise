@@ -79,7 +79,7 @@ export default function Checklist(props: {
           (() => {
             if (props.fieldsData)
               return (
-                Object.keys(props.fieldsData.fields).map((key, index) => {
+                props.fieldsData.fields && Object.keys(props.fieldsData.fields).map((key, index) => {
                   return (
                     <div key={index} className="flex gap-4 items-center mt-4">
                       <input

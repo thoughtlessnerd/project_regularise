@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Heatmap from "./Heatmap";
 
 function FieldsBento(props:{fieldsData:any,AddFieldFunction:()=>void,DeleteField(fieldName: string): Promise<void>})
@@ -7,7 +6,7 @@ function FieldsBento(props:{fieldsData:any,AddFieldFunction:()=>void,DeleteField
     return (
         <div className="flex flex-wrap gap-4 mt-8 mb-24">
             {
-                props.fieldsData && Object.keys(props.fieldsData.fields).map((key,index)=>{
+                props.fieldsData && props.fieldsData.fields && Object.keys(props.fieldsData.fields).map((key,index)=>{
                     return(
                         <div key={index} className={`${fieldCardClass} p-8 flex flex-col`}>
                             <div className="flex justify-between">
