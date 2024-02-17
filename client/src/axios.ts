@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-    baseURL:"http://localhost:3475/api/v1/",
+    baseURL:"https://regularise-api.onrender.com/api/v1/",
     timeout:10000
 })
 
