@@ -89,7 +89,7 @@ class userController {
         task: req.body.task,
         userID: req.user,
       };
-      const user = await this.service.markTaskAsDone(data);
+      const user = await this.service.deleteTask(data);
       res
         .status(200)
         .json({ message: "task deleted", success: true, data: user });
