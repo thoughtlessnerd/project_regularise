@@ -71,6 +71,50 @@ class userService {
       throw error;
     }
   };
+  addTask = async (data) => {
+    try {
+      const user = await this.userRepository.getUserById(data.userID);
+      user.todoTasks.push(data.task);
+      await user.save();
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  };
+  deleteTask = async (data) => {
+    try {
+      const user = await this.userRepository.getUserById(data.userID);
+      user.todoTasks = user.todoTasks.filter((task) => task !== data.task);
+      await user.save();
+      return user;
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+  clearDoneTasks = async (data) => {
+    try {
+      const user = await this.userRepository.getUserById(data.userID);
+      user.doneTasks = [];
+      await user.save();
+      return user;
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+  markTaskAsDone = async (data) => {
+    try {
+      const user = await this.userRepository.getUserById(data.userID);
+      user.doneTasks.push(data.task);
+      user.todoTasks = user.todoTasks.filter((task) => task !== data.task);
+      await user.save();
+      return user;
+    }
+    catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = userService;

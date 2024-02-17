@@ -71,6 +71,59 @@ class userController {
       res.status(400).json({ error: error.message });
     }
   };
+  addTask = async (req, res) => {
+    try {
+      const data = {
+        task: req.body.task,
+        userID: req.user,
+      };
+      const user = await this.service.addTask(data);
+      res.status(200).json({ message: "task added", success: true, data: user });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+  deleteTask = async (req, res) => {
+    try {
+      const data = {
+        task: req.body.task,
+        userID: req.user,
+      };
+      const user = await this.service.markTaskAsDone(data);
+      res
+        .status(200)
+        .json({ message: "task deleted", success: true, data: user });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+  markTaskAsDone = async (req, res) => {
+    try {
+      const data = {
+        task: req.body.task,
+        userID: req.user,
+      };
+      const user = await this.service.markTaskAsDone(data);
+      res
+        .status(200)
+        .json({ message: "task marked as done", success: true, data: user });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+  clearDoneTasks = async (req, res) => {
+    try {
+      const data = {
+        userID: req.user,
+      };
+      const user = await this.service.clearDoneTasks(data);
+      res
+        .status(200)
+        .json({ message: "done tasks cleared", success: true, data: user });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
 }
 
 module.exports = new userController();

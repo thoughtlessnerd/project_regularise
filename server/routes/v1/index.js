@@ -29,4 +29,9 @@ router.delete("/image", isAuthenticated, imageController.deleteProfileImage);
 
 router.get("/quote", quoteController.getQuoteForToday);
 
+router.post("/task", isAuthenticated, userController.addTask);
+router.post("/task/done", isAuthenticated, userController.markTaskAsDone);
+router.delete("/task", isAuthenticated, userController.deleteTask);
+router.delete("/task/done", isAuthenticated, userController.clearDoneTasks);
+
 module.exports = router;

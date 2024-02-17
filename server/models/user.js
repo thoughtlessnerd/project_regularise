@@ -36,6 +36,12 @@ const userSchema = new mongoose.Schema(
       required: [true, "can't be blank"],
       index: { unique: true },
     },
+    todoTasks: {
+      type: Array,
+    },
+    doneTasks: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );
