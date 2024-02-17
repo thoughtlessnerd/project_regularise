@@ -234,6 +234,8 @@ export function AuthProvier(props:{children:React.ReactNode})
     {
         if(e.response.status == 401)
         {
+            toast.dismiss();
+            if(!userdata?.token)return e.response;
             toast.error("You have been signed out", {
                 position: "bottom-right",
             });

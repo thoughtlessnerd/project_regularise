@@ -14,7 +14,7 @@ function Navbar(props:{className?:string})
             {
             (!auth?.isAuthorized)?(
                 <nav className={`${props.className} container mx-auto p-8 flex justify-between items-center`}>
-                    <h1>LOGO HERE</h1>
+                    <h1>REGULARISE</h1>
                     <div className='flex gap-4'>
                         <Link to='/signin'><TextButton className=''>SIGN IN</TextButton></Link>
                         <Link to='/signup'><Button className='' color='primary'>SIGN UP</Button></Link>
@@ -22,7 +22,7 @@ function Navbar(props:{className?:string})
                 </nav>
             ):(
                 <nav className={`${props.className} container mx-auto p-8 flex justify-between items-center`}>
-                    <h1>LOGO HERE</h1>
+                    <h1>REGULARISE</h1>
                     <Timer />
                 </nav>
             )

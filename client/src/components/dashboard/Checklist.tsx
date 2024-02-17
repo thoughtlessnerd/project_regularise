@@ -86,7 +86,7 @@ export default function Checklist(props: {
                   onChange={() => handleCheck(key)}
                   type="checkbox"
                   name=""
-                  className="appearance-none rounded-full outline outline-1 checked:outline-none outline-primary checked:bg-primary h-6 w-6"
+                  className="appearance-none rounded-full outline outline-1 checked:outline-none outline-primary checked:bg-primary h-6 w-6 relative after:w-[50%] after:h-[90%] after:absolute after:translate-x-[90%] after:-translate-y-1/4 after:scale-110 after:rotate-45 after:duration-100 after:border-transparent checked:after:border-text after:border-b-4 after:border-r-4"
                 />
                 <label
                   htmlFor={`${key}`}
