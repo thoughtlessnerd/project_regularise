@@ -127,7 +127,7 @@ export default function Settings() {
       toast.success(response.data.message, {
         position: "bottom-right",
       });
-      auth?.APIFunctions.ReSignin();
+      auth?.APIFunctions.RefetchUserdata();
     }
   }
   const handlePasswordUpdate: FormEventHandler<HTMLFormElement> = async (event) => {

@@ -65,7 +65,7 @@ export function ModalProvier(props: { children: React.ReactNode }) {
         <>
             <div
                 className={`${modalOpen ? "bg-black/80" : "pointer-events-none"
-                    } duration-500 fixed h-screen w-screen top-0 left-0 grid place-items-center z-50`}
+                    } duration-300 fixed h-screen w-screen top-0 left-0 grid place-items-center z-50`}
             >
                 <div
                     onClick={() => {
@@ -74,11 +74,11 @@ export function ModalProvier(props: { children: React.ReactNode }) {
                     className={`absolute w-full h-full -z-10`}
                 ></div>
                 <div
-                    className={`card max-w-lg w-full p-4 lg:p-8 ${modalOpen ? "" : "scale-125 opacity-0"
+                    className={`card max-w-lg w-full duration-300 p-4 lg:p-8 ${modalOpen ? "" : "scale-125 opacity-0"
                         }`}
                 >
                     <div className="flex justify-between items-center">
-                        <h1 className="text-2xl md:text-4xl font-medium">{modalTitle}</h1>
+                        <h1 className="text-xl md:text-2xl font-medium">{modalTitle}</h1>
                         <svg
                             onClick={() => {
                                 negativeClick();

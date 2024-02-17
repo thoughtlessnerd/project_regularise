@@ -18,7 +18,7 @@ type AuthContextType = {
     {
         SignIn:(email:string,password:string)=>Promise<boolean>,
         SignUp:(email:string,password:string,name:string,username:string)=>Promise<boolean>,
-        ReSignin:()=>Promise<boolean>,
+        RefetchUserdata:()=>Promise<boolean>,
         SignOut:()=>void,
         PostRequest:(url:string,body:any,needsToken:boolean)=>Promise<any>,
         DeleteRequest:(url:string,body:any,needsToken:boolean)=>Promise<any>,
@@ -60,7 +60,7 @@ export function AuthProvier(props:{children:React.ReactNode})
         GetRequest,
         DeleteRequest,
         PatchRequest,
-        ReSignin
+        RefetchUserdata
     };
 
     const value = {
@@ -132,7 +132,7 @@ export function AuthProvier(props:{children:React.ReactNode})
         //TODO DeAuth
         navigator('/');
     }
-    async function ReSignin():Promise<boolean>
+    async function RefetchUserdata():Promise<boolean>
     {
         try
         {

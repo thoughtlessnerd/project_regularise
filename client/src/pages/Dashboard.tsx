@@ -10,6 +10,7 @@ import Checklist from "../components/dashboard/Checklist";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import DailyQuote from "../components/dashboard/DailyQuote";
+import TodoList from "../components/dashboard/TodoList";
 
 export default function Dashboard() {
   const auth = useAuth();
@@ -17,6 +18,7 @@ export default function Dashboard() {
   const [profileImage, setProfileImage] = useState<string>();
   const [fieldsData, setFieldsData] = useState<any>();
   const [addFieldModalOpen, setAddFieldModalOpen] = useState<boolean>(false);
+  //TODO refactor this to useReducer
   const [newFieldName, setNewFieldName] = useState<InputState>({
     value: "",
     hasError: false,
@@ -46,7 +48,7 @@ export default function Dashboard() {
   };
   const CreateField = async (e: any) => {
     e.preventDefault();
-    if (!newFieldName.value.match(/[\S\s]+[\S]+/)) {
+    if (!newFieldName.value.match(/[\S\s]+[\S]+/) || newFieldName.value.length > 20) {
       setNewFieldName((prev) => ({ ...prev, hasError: true }));
       return;
     }
@@ -112,7 +114,7 @@ export default function Dashboard() {
       <div
         className={`${
           addFieldModalOpen ? "bg-black/80" : "pointer-events-none"
-        } duration-500 fixed h-screen w-screen top-0 left-0 z-50 grid place-items-center`}
+        } duration-200 fixed h-screen w-screen top-0 left-0 z-50 grid place-items-center`}
       >
         <div
           onClick={() => {
@@ -121,7 +123,7 @@ export default function Dashboard() {
           className={`absolute w-full h-full -z-10`}
         ></div>
         <div
-          className={`card max-w-lg w-full p-4 lg:p-8 ${
+          className={`card duration-200 max-w-lg w-full p-4 lg:p-8 ${
             addFieldModalOpen ? "" : "scale-125 opacity-0"
           }`}
         >
@@ -136,7 +138,7 @@ export default function Dashboard() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-8 h-8 text-text/70 hover:text-primary hover:scale-105 active:scale-95 duration-100 cursor-pointer"
+              className="w-8 h-8 text-text/70 hover:text-primary hover:scale-105 active:scale-95 duration-200 cursor-pointer"
             >
               <path
                 strokeLinecap="round"
@@ -156,7 +158,7 @@ export default function Dashboard() {
               onChange={(e) =>
                 setNewFieldName({ value: e.target.value, hasError: false })
               }
-              placeHolder="Nevgon"
+              placeHolder="Max 20 Chars"
             >
               Field Title
             </Input>
@@ -231,10 +233,7 @@ export default function Dashboard() {
             fieldsData={fieldsData}
             className="grow w-full lg:w-48 h-96 card p-4"
           />
-          <Checklist
-            fieldsData={fieldsData}
-            className="grow w-full lg:w-48 h-96 card p-4"
-          />
+          <TodoList className="grow w-full lg:w-48 h-96 card p-4"/>
           {/* {
             !breakpoints.isXl && <Heatmap fieldsData={fieldsData} className="grow w-full lg:w-96 card p-4"/>
           } */}
