@@ -63,7 +63,7 @@ export default function TodoList(props: { className?: string }) {
             setHasError(true);
             return;
         }
-        if(newTask.length > 20)
+        if(newTask.length > 120)
         {
             toast.error("Task name too long", {
                 position: "bottom-right",
