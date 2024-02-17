@@ -61,7 +61,7 @@ class fieldService {
             newHistory[key][newHistory[key].length - 1] = elem;
           } else {
             streaks[key] = 0;
-            update[key] = 0;
+            update[key] = -1;
             newFields[key] -= Math.floor(
               ratingChange * (Math.random() * 0.5 + 1)
             );
@@ -75,7 +75,7 @@ class fieldService {
           let idx = 0;
           for (let key in newFields) {
             streaks[key] = 0;
-            update[key] = 0;
+            update[key] = -1;
             newFields[key] -= Math.floor(
               ratingChange * (Math.random() * 0.5 + 1) * Math.floor(timeDiff)
             );
