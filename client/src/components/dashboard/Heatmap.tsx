@@ -21,8 +21,12 @@ function Heatmap(props: {
   }
 
   useEffect(() => {
-    if (!props.heatMapData) return;
     let res: number[][] = Array.from({ length: 13 }, () => Array(32).fill(0));
+    if (!props.heatMapData)
+    {
+      setHeatMapData(res);
+      return;
+    } 
 
     for (let fieldName in props.heatMapData) {
       let currentFieldData: number[][] = props.heatMapData[fieldName].map(
@@ -149,8 +153,6 @@ function Heatmap(props: {
         ref={scrollerRef}
         className={`overflow-x-auto overflow-y-visible p-4`}
       >
-        {" "}
-        {/* TODO added p-4 here which fixes overflow issue of tooltip but increases white space*/}
         <div className="h-full w-max flex gap-4 justify-center items-center">
           {(() => {
             let offsetterIndex = getFirstDayOfPreviousYearMonth() - 1;
@@ -203,7 +205,7 @@ function Heatmap(props: {
                             <span className="">{dayIndex + 1}</span>
                           </span>
                           <div
-                            style={{ opacity: dayValue / numberOfFields }}
+                            style={{ opacity: (dayValue?dayValue:0) / numberOfFields?numberOfFields:1 }}
                             className={`h-full w-full ${
                               dayValue != 0 ? "bg-primary" : "hidden"
                             } rounded`}

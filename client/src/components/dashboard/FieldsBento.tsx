@@ -15,7 +15,7 @@ function FieldsBento(props:{fieldsData:any,AddFieldFunction:()=>void,DeleteField
                                     <h1 className="text-xl md:text-3xl font-bold">{key}</h1>
                                     <div className="flex items-center gap-2">
                                         <h1>{props.fieldsData.fields[key]}</h1>
-                                        <svg className={`scale-125 -translate-y-[2px] ${props.fieldsData.update[index]?"text-green-500":"text-red rotate-180"}`} xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
+                                        <svg className={`scale-125 -translate-y-[2px] ${props.fieldsData.update[key] > 1?"text-green-500":"text-red rotate-180"} ${props.fieldsData.update[key] == 0?"hidden":""}`} xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
                                             <path d="M5 0.5L9.33013 8H0.669873L5 0.5Z" fill="currentColor"/>
                                         </svg>
                                     </div>
