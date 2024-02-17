@@ -78,6 +78,7 @@ class fieldRepo extends crudRepo {
             [`fields.${fieldName}`]: 1,
             [`history.${fieldName}`]: 1,
             [`streaks.${fieldName}`]: 1,
+            [`update.${fieldName}`]: 1,
           },
         },
         { new: true }
