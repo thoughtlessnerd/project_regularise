@@ -17,10 +17,12 @@ type AuthContextType = {
     {
         SignIn:(email:string,password:string)=>Promise<boolean>,
         SignUp:(email:string,password:string,name:string,username:string)=>Promise<boolean>,
+        ReSignin:()=>Promise<boolean>,
         SignOut:()=>void,
         PostRequest:(url:string,body:any,needsToken:boolean)=>Promise<any>,
         DeleteRequest:(url:string,body:any,needsToken:boolean)=>Promise<any>,
-        GetRequest:(url:string,needsToken:boolean)=>Promise<any>
+        GetRequest:(url:string,needsToken:boolean)=>Promise<any>,
+        PatchRequest:(url:string,body:any,needsToken:boolean)=>Promise<any>,
     },
 }
 
@@ -35,7 +37,6 @@ export function AuthProvier(props:{children:React.ReactNode})
 {
     const navigator = useNavigate();
     const [isAuthorized,setIsAuthorized] = useState(false);
-    const [profileImage,setprofileImage] = useState("");
     const [userdata,setUserdata] = useState<UserdataType>({name:"",token:"",username:"",email:""});
 
     useEffect(()=>{
@@ -55,26 +56,26 @@ export function AuthProvier(props:{children:React.ReactNode})
         SignOut,
         PostRequest,
         GetRequest,
-        DeleteRequest
+        DeleteRequest,
+        PatchRequest,
+        ReSignin
     };
 
     const value = {
         userdata,
         isAuthorized,//is signed in
         APIFunctions,
-        profileImage
     }
 
     return  <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>
 
     async function saveLoginInfo(response:AuthResponseType)
     {
-        setUserdata(response.data);
+        setUserdata(prev=>({...prev,...response.data}));
         setIsAuthorized(true);
         localStorage.setItem("userdata",JSON.stringify(response.data));
         navigator('/');
     }
-
     async function SignIn(email:string,password:string):Promise<boolean>
     {
         try
@@ -127,6 +128,23 @@ export function AuthProvier(props:{children:React.ReactNode})
         });
         //TODO DeAuth
         navigator('/');
+    }
+    async function ReSignin():Promise<boolean>
+    {
+        try
+        {
+            const response:AuthResponseType = await GetRequest('/user',true);
+            if(response.status == 200)
+            {
+                saveLoginInfo(response.data);
+                return true;
+            }
+        }
+        catch(e)
+        {
+            return false;
+        }
+        return false;
     }
     async function GetRequest(url:string,sendToken:boolean)
     {
@@ -181,7 +199,28 @@ export function AuthProvier(props:{children:React.ReactNode})
             }
             else
             {
-                response = await axios.post(url,{data:body});
+                response = await axios.delete(url,{data:body});
+            }   
+        }
+        catch(e:any)
+        {
+            return HandleErrors(e);
+        }
+        return response;
+    }
+    async function PatchRequest(url:string,body:any,needsToken:boolean)
+    {
+        let response:AuthResponseType;
+
+        try
+        {
+            if(needsToken && isAuthorized)
+            {
+                response = await axios.patch(url,body,{headers:{authorization: `${userdata?.token}`}},);
+            }
+            else
+            {
+                response = await axios.patch(url,body);
             }   
         }
         catch(e:any)
@@ -193,7 +232,13 @@ export function AuthProvier(props:{children:React.ReactNode})
 
     function HandleErrors(e:any):AuthResponseType
     {
-        console.error(e.response);
+        if(e.response.status == 401)
+        {
+            toast.error("You have been signed out", {
+                position: "bottom-right",
+            });
+            SignOut();
+        }
         if(e.response.data.error)
         {
             toast.error(e.response.data.error, {
