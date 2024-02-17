@@ -57,6 +57,7 @@ class fieldRepo extends crudRepo {
             lastUpdateTime: updateTime,
             [`history.${fieldName}`]: history,
             [`streaks.${fieldName}`]: 0,
+            [`update.${fieldName}`]: 0,
           },
         },
         { new: true, upsert: true }

@@ -16,7 +16,7 @@ class fieldService {
       const lastDone = fields.lastDone;
       const history = fields.history;
       const newHistory = { ...history };
-      const update = [];
+      const update = {};
 
       // Get the current date and time in UTC
       let currentDate = new Date();
@@ -48,7 +48,7 @@ class fieldService {
         for (let key in newFields) {
           if (lastDone.includes(key)) {
             streaks[key] += 1;
-            update[idx] = 1;
+            update[key] = 1;
 
             newFields[key] += Math.floor(
               ratingChange * (Math.random() * 0.5 + 1)
@@ -61,7 +61,7 @@ class fieldService {
             newHistory[key][newHistory[key].length - 1] = elem;
           } else {
             streaks[key] = 0;
-            update[idx] = 0;
+            update[key] = 0;
             newFields[key] -= Math.floor(
               ratingChange * (Math.random() * 0.5 + 1)
             );
@@ -75,7 +75,7 @@ class fieldService {
           let idx = 0;
           for (let key in newFields) {
             streaks[key] = 0;
-            update[idx] = 0;
+            update[key] = 0;
             newFields[key] -= Math.floor(
               ratingChange * (Math.random() * 0.5 + 1) * Math.floor(timeDiff)
             );
@@ -90,7 +90,6 @@ class fieldService {
             newHistory[key].push(0);
           }
         }
-        console.log(newFields);
 
         return await this.fieldRepo.update(
           { userID },

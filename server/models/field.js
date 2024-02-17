@@ -22,7 +22,7 @@ const fieldSchema = new mongoose.Schema({
     type: Object,
   },
   update: {
-    type: Array,
+    type: Object,
   },
 });
 
