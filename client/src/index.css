@@ -21,7 +21,7 @@ body
 }
 .card
 {
-  @apply bg-background border border-text/5 hover:border-text/10 duration-500 rounded-xl
+  @apply bg-background border border-text/5 hover:border-text/10 rounded-xl
 }
 .gradient-text
 {
