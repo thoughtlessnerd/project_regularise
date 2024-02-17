@@ -76,7 +76,7 @@ class userService {
       const user = await this.userRepository.getUserById(data.userID);
       user.todoTasks.push(data.task);
       await user.save();
-      return user;
+      return {doneTasks: user.doneTasks || [], todoTasks: user.todoTasks || []};
     } catch (error) {
       throw error;
     }
@@ -86,7 +86,7 @@ class userService {
       const user = await this.userRepository.getUserById(data.userID);
       user.todoTasks = user.todoTasks.filter((task) => task !== data.task);
       await user.save();
-      return user;
+      return {doneTasks: user.doneTasks || [], todoTasks: user.todoTasks || []};
     }
     catch (error) {
       throw error;
@@ -97,7 +97,7 @@ class userService {
       const user = await this.userRepository.getUserById(data.userID);
       user.doneTasks = [];
       await user.save();
-      return user;
+      return {doneTasks: user.doneTasks || [], todoTasks: user.todoTasks || []};
     }
     catch (error) {
       throw error;
@@ -109,7 +109,7 @@ class userService {
       user.doneTasks.push(data.task);
       user.todoTasks = user.todoTasks.filter((task) => task !== data.task);
       await user.save();
-      return user;
+      return {doneTasks: user.doneTasks || [], todoTasks: user.todoTasks || []};
     }
     catch (error) {
       throw error;
