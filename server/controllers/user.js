@@ -74,7 +74,7 @@ class userController {
   updateTasks = async (req, res) => {
     try {
       const data = {
-        task: req.body.task,
+        tasks: req.body.tasks,
         userID: req.user,
       };
       const user = await this.service.updateTasks(data);
