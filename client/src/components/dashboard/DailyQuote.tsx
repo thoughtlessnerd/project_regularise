@@ -8,6 +8,7 @@ export default function DailyQuote()
     const auth = useAuth()
     useEffect(()=>{
         auth?.APIFunctions.GetRequest("/quote",true).then((response:any)=>{
+            if(response.data)
             setQuote(response.data.data);
         })
     },[])

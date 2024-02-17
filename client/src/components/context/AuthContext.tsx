@@ -13,6 +13,7 @@ type UserdataType = {
 type AuthContextType = {
     userdata:UserdataType,
     isAuthorized:boolean,
+    isOffline:boolean,
     APIFunctions:
     {
         SignIn:(email:string,password:string)=>Promise<boolean>,
@@ -38,6 +39,7 @@ export function AuthProvier(props:{children:React.ReactNode})
     const navigator = useNavigate();
     const [isAuthorized,setIsAuthorized] = useState(false);
     const [userdata,setUserdata] = useState<UserdataType>({name:"",token:"",username:"",email:""});
+    const [isOffline,setIsOffline] = useState(false);
 
     useEffect(()=>{
         let local = localStorage.getItem("userdata");
@@ -64,6 +66,7 @@ export function AuthProvier(props:{children:React.ReactNode})
     const value = {
         userdata,
         isAuthorized,//is signed in
+        isOffline,//is offline in
         APIFunctions,
     }
 
@@ -148,7 +151,15 @@ export function AuthProvier(props:{children:React.ReactNode})
     }
     async function GetRequest(url:string,sendToken:boolean)
     {
-        let response:AuthResponseType;
+        let response:AuthResponseType = {status:0,data:null};
+        if(isOffline)
+        {
+            toast.dismiss();
+            toast.error("You are offline", {
+                position: "bottom-right",
+            });
+            return response;
+        }
         try
         {
             if(sendToken)
@@ -168,7 +179,15 @@ export function AuthProvier(props:{children:React.ReactNode})
     }
     async function PostRequest(url:string,body:any,needsToken:boolean)
     {
-        let response:AuthResponseType;
+        let response:AuthResponseType = {status:0,data:null};
+        if(isOffline)
+        {
+            toast.dismiss();
+            toast.error("You are offline", {
+                position: "bottom-right",
+            });
+            return response;
+        }
 
         try
         {
@@ -189,7 +208,15 @@ export function AuthProvier(props:{children:React.ReactNode})
     }
     async function DeleteRequest(url:string,body:any,needsToken:boolean)
     {
-        let response:AuthResponseType;
+        let response:AuthResponseType = {status:0,data:null};
+        if(isOffline)
+        {
+            toast.dismiss();
+            toast.error("You are offline", {
+                position: "bottom-right",
+            });
+            return response;
+        }
 
         try
         {
@@ -210,7 +237,15 @@ export function AuthProvier(props:{children:React.ReactNode})
     }
     async function PatchRequest(url:string,body:any,needsToken:boolean)
     {
-        let response:AuthResponseType;
+        let response:AuthResponseType = {status:0,data:null};
+        if(isOffline)
+        {
+            toast.dismiss();
+            toast.error("You are offline", {
+                position: "bottom-right",
+            });
+            return response;
+        }
 
         try
         {
@@ -232,20 +267,31 @@ export function AuthProvier(props:{children:React.ReactNode})
 
     function HandleErrors(e:any):AuthResponseType
     {
-        if(e.response.status == 401)
+        console.log(e);
+        if(e?.code == "ERR_NETWORK" && !isOffline)
         {
+            toast.dismiss();
+            toast.error("Server Error", {
+                position: "bottom-right",
+            });
+            setIsOffline(true);
+        }
+        if(e?.response?.status == 401)
+        {
+            toast.dismiss();
+            if(!userdata?.token)return e.response;
             toast.error("You have been signed out", {
                 position: "bottom-right",
             });
             SignOut();
         }
-        if(e.response.data.error)
+        if(e?.response?.data?.error)
         {
             toast.error(e.response.data.error, {
                 position: "bottom-right",
             });
         }
-        return e.response;
+        return {status:e?.response?.status,data:null};
     }
 
 }

@@ -106,6 +106,7 @@ export default function Dashboard() {
   }
 
   const gap = "gap-4";
+  if(auth?.isOffline) return <h1 className="text-2xl text-center mt-10">You are Offline</h1>
   return (
     <>
       <div
