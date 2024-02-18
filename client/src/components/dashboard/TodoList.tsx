@@ -37,8 +37,8 @@ export default function TodoList(props: { className?: string }) {
         console.log(response);
         if (response?.data?.data?.tasks) {
             setTaskList(response.data.data.tasks);
-            setHasFetched(true);
         }
+        setHasFetched(true);
     }
 
     async function UploadChecklist() {
