@@ -50,10 +50,6 @@ export default function Settings() {
     }));
   };
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-  };
-
   const handleFileLoad = (file: File) => {
     if (file) {
       const reader = new FileReader();

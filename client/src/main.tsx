@@ -4,6 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvier } from './components/context/AuthContext.tsx'
+import { ModalProvier } from './components/context/ModalContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     // <BrowserRouter>
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvier>
-        <App />
+        <ModalProvier>
+          <App />
+        </ModalProvier>
       </AuthProvier>
     </BrowserRouter>
   </React.StrictMode>,

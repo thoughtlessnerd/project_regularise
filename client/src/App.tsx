@@ -4,13 +4,28 @@ import SignInPage from "./pages/SignInPage"
 import SignUpPage from "./pages/SignUpPage"
 import { useAuth } from "./components/context/AuthContext"
 import Dashboard from "./pages/Dashboard"
-import { ModalProvier } from "./components/context/ModalContext"
 import Settings from "./pages/Settings"
 import { Bounce, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useModal } from "./components/context/ModalContext";
+import { registerSW } from "virtual:pwa-register";
 
 function App() {
   const auth = useAuth();
+
+  const modal = useModal();
+
+  const updateSW = registerSW({
+    onNeedRefresh() {
+      modal?.CreateModal("New content available", "Please refresh to get the latest content","Refresh","Cancel").then((res) => {
+        if (res) {
+          updateSW(true);
+        }
+      }
+      );
+    },
+  });
+
   return(
     <>
       <ToastContainer
@@ -26,7 +41,7 @@ function App() {
         theme="dark"
         transition={Bounce}
         />
-      <ModalProvier>
+      
         {
           (!auth?.isAuthorized)?(
             <Routes>
@@ -43,7 +58,6 @@ function App() {
             </Routes>
           )
         }
-      </ModalProvier>
     </>
   )
 }

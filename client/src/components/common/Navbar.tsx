@@ -1,9 +1,8 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Button from './Button'
 import TextButton from './TextButton'
 import { useAuth } from '../context/AuthContext'
 import Timer from './Timer';
-import { useState } from 'react';
 
 function Navbar(props:{className?:string})
 {
