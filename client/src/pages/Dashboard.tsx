@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import DailyQuote from "../components/dashboard/DailyQuote";
 import TodoList from "../components/dashboard/TodoList";
+import { Analytics } from "@vercel/analytics/react"
 
 export default function Dashboard() {
   const auth = useAuth();
@@ -111,6 +112,7 @@ export default function Dashboard() {
   if(auth?.isOffline) return <h1 className="text-2xl text-center mt-10">You are Offline</h1>
   return (
     <>
+      <Analytics/>
       <div
         className={`${
           addFieldModalOpen ? "bg-black/80" : "pointer-events-none"
