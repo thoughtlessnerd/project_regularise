@@ -22,11 +22,10 @@ function Heatmap(props: {
 
   useEffect(() => {
     let res: number[][] = Array.from({ length: 13 }, () => Array(32).fill(0));
-    if (!props.heatMapData)
-    {
+    if (!props.heatMapData) {
       setHeatMapData(res);
       return;
-    } 
+    }
 
     for (let fieldName in props.heatMapData) {
       let currentFieldData: number[][] = props.heatMapData[fieldName].map(
@@ -61,8 +60,8 @@ function Heatmap(props: {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth();
-    const isLeapYear = (year:number) => {
-      return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+    const isLeapYear = (year: number) => {
+      return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
     };
     const months = [
       { name: "January", number: 1, days: 31 },
@@ -78,11 +77,12 @@ function Heatmap(props: {
       { name: "November", number: 11, days: 30 },
       { name: "December", number: 12, days: 31 },
     ];
-    let ring = (months.slice(currentMonth).concat(months.slice(0, currentMonth + 1)))
-    if(ring[12].name == "February")
-    {
-      ring[12] = {...ring[12],days:isLeapYear(currentYear) ? 29 : 28}
-      ring[0] = {...ring[0],days:isLeapYear(currentYear-1) ? 29 : 28}
+    let ring = months
+      .slice(currentMonth)
+      .concat(months.slice(0, currentMonth + 1));
+    if (ring[12].name == "February") {
+      ring[12] = { ...ring[12], days: isLeapYear(currentYear) ? 29 : 28 };
+      ring[0] = { ...ring[0], days: isLeapYear(currentYear - 1) ? 29 : 28 };
     }
     return months.slice(currentMonth).concat(months.slice(0, currentMonth + 1));
   }, []);
@@ -182,14 +182,19 @@ function Heatmap(props: {
                           <div
                             key={dayIndex}
                             className={`${
-                              dayIndex == today ? "bg-green-600" : ""
+                              dayIndex == today && monthIndex == 12
+                                ? "bg-green-600"
+                                : ""
                             } rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square`}
                           ></div>
                         );
-                        offsetterIndex++;
+                      offsetterIndex++;
                       return (
                         <div
-                          style={{ gridRowStart: dayIndex == 0 ? (offsetterIndex%7+1) : "" }}
+                          style={{
+                            gridRowStart:
+                              dayIndex == 0 ? (offsetterIndex % 7) + 1 : "",
+                          }}
                           key={dayIndex}
                           className={
                             "bg-background2 border duration-100 hover:border-text/50 border-text/5 rounded w-[12px] md:w-[16px] xl:w-[12px] 2xl:w-[16px] aspect-square group relative flex justify-center items-center"
@@ -205,7 +210,12 @@ function Heatmap(props: {
                             <span className="">{dayIndex + 1}</span>
                           </span>
                           <div
-                            style={{ opacity: (dayValue?dayValue:0) / numberOfFields?numberOfFields:1 }}
+                            style={{
+                              opacity:
+                                (dayValue ? dayValue : 0) / numberOfFields
+                                  ? numberOfFields
+                                  : 1,
+                            }}
                             className={`h-full w-full ${
                               dayValue != 0 ? "bg-primary" : "hidden"
                             } rounded`}
