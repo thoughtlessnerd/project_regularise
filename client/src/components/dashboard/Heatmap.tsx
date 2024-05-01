@@ -171,7 +171,7 @@ function Heatmap(props: {
                       // console.log(lastVal);
                       let putCross =
                         dayIndex != 0 &&
-                        daysArray[dayIndex - 1] == 1 &&
+                        daysArray[dayIndex - 1] != 0 &&
                         daysArray[dayIndex] == 0 &&
                         dayIndex != today;
                       if (
