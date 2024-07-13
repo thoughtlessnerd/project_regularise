@@ -1,61 +1,66 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root
-{
-  --toastify-color-success: #3A5CD6;
+:root {
+  --toastify-color-success: #3a5cd6;
 }
 
-*
-{
+* {
   /* outline: solid 2px red; */
 }
 
-body
-{
-  font-family: 'Poppins', sans-serif;
-  @apply bg-background2 text-text
+@font-face {
+  font-family: "Moric";
+  src: url("./fonts/Morise.otf") format("opentype");
 }
-.card
-{
-  @apply bg-background border border-text/5 hover:border-text/10 rounded-xl
+
+body {
+  font-family: "Poppins", sans-serif;
+  @apply bg-background2 text-text;
 }
-.gradient-text
-{
+.card {
+  @apply bg-background border border-text/5 hover:border-text/10 rounded-xl;
+}
+.gradient-text {
   @apply from-primary to-accent bg-gradient-to-t bg-clip-text text-transparent;
 }
-.pattern
-{
+.pattern {
   --s: 194px; /* control the size */
-  --c1: #29A7EE;
-  --c3: #3A5CD6;
+  --c1: #29a7ee;
+  --c3: #3a5cd6;
   --c2: #2a43a1;
-  
-  --_l:#0000 calc(25%/3),var(--c1) 0 25%,#0000 0;
-  --_g:conic-gradient(from 120deg at 50% 87.5%,var(--c1) 120deg,#0000 0);
-  background:
-    var(--_g),var(--_g) 0 calc(var(--s)/2),
-    conic-gradient(from 180deg at 75%,var(--c2) 60deg,#0000 0),
-    conic-gradient(from 60deg at 75% 75%,var(--c1) 0 60deg,#0000 0),
-    linear-gradient(150deg,var(--_l)) 0 calc(var(--s)/2),
-    conic-gradient(at 25% 25%,#0000 50%,var(--c2) 0 240deg,var(--c1) 0 300deg,var(--c2) 0),
-    linear-gradient(-150deg,var(--_l)) var(--c3) /* third color here */;
-  background-size: calc(0.866*var(--s)) var(--s);
+
+  --_l: #0000 calc(25% / 3), var(--c1) 0 25%, #0000 0;
+  --_g: conic-gradient(from 120deg at 50% 87.5%, var(--c1) 120deg, #0000 0);
+  background: var(--_g), var(--_g) 0 calc(var(--s) / 2),
+    conic-gradient(from 180deg at 75%, var(--c2) 60deg, #0000 0),
+    conic-gradient(from 60deg at 75% 75%, var(--c1) 0 60deg, #0000 0),
+    linear-gradient(150deg, var(--_l)) 0 calc(var(--s) / 2),
+    conic-gradient(
+      at 25% 25%,
+      #0000 50%,
+      var(--c2) 0 240deg,
+      var(--c1) 0 300deg,
+      var(--c2) 0
+    ),
+    linear-gradient(-150deg, var(--_l)) var(--c3) /* third color here */;
+  background-size: calc(0.866 * var(--s)) var(--s);
 }
-.clock
-{
+.clock {
   /* font-family: 'Segment7Standard'; */
 }
-::-webkit-scrollbar
-{
+::-webkit-scrollbar {
   width: 5px;
   height: 0px;
 }
 
-::-webkit-scrollbar-thumb
-{
+::-webkit-scrollbar-thumb {
   @apply bg-primary rounded-full;
+}
+
+.logo-font {
+  font-family: "Moric", sans-serif;
 }

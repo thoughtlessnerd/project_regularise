@@ -68,8 +68,8 @@ function LandingPage() {
             </Canvas>
           </div>
         </section>
-        <section className="py-24">
-          <div className="w-full md:w-160 text-xl">
+        <section className="py-24 max-md:px-16 max-md:py-12">
+          <div className="w-full md:w-160 text-xl max-md:text-sm">
             <h1 className="text-1xl md:text-4xl font-medium uppercase opacity-90">
               What is
             </h1>
@@ -84,8 +84,8 @@ function LandingPage() {
             </p>
           </div>
         </section>
-        <section className="py-24 flex justify-between">
-          <div className="md:w-160 text-xl">
+        <section className="py-24 max-md:py-12 flex justify-between max-md:px-16 max-md:gap-4 max-md:flex-col max-md:justify-center">
+          <div className="md:w-160 text-xl max-md:text-sm">
             <h1 className="text-1xl md:text-4xl font-medium uppercase opacity-90">
               Consistency
             </h1>
@@ -97,11 +97,11 @@ function LandingPage() {
               daily activities. It provides you with a visual representation of
               your daily activities. It helps you to maintain consistency in
               your daily routine. It also helps you to identify the areas where
-              you need to improve.{" "}
+              you need to improve.
             </p>
           </div>
           <img
-            className="object-contain origin-right scale-75"
+            className="object-contain origin-right scale-75 max-md:scale-100"
             src={Heatmap}
             alt=""
           />
