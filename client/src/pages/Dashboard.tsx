@@ -11,7 +11,9 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import DailyQuote from "../components/dashboard/DailyQuote";
 import TodoList from "../components/dashboard/TodoList";
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react";
+import { messaging } from "../../firebase.config";
+import { getToken } from "firebase/messaging";
 
 export default function Dashboard() {
   const auth = useAuth();
@@ -26,11 +28,50 @@ export default function Dashboard() {
   });
 
   const modal = useModal();
+  // console.log("test");
 
   useEffect(() => {
     GetFields();
     GetProfileImage();
+    if (Notification.permission == "default") RequestNotificationPerms();
   }, []);
+
+  const RequestNotificationPerms = async () => {
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission == "granted") {
+        GenarateNotificationToken().then((token) => {
+          sendNotifToken(token);
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const GenarateNotificationToken = async () => {
+    const token = await getToken(messaging, {
+      vapidKey: import.meta.env.VITE_vapidKey,
+    });
+    return token;
+  };
+
+  const sendNotifToken = async (token: string | null) => {
+    try {
+      const response = await auth?.APIFunctions.PostRequest(
+        "/notification",
+        { token: token },
+        true
+      );
+      if (response.status == 201) {
+        toast.success("Notification Enabled", {
+          position: "bottom-right",
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const GetFields = async () => {
     try {
@@ -49,7 +90,10 @@ export default function Dashboard() {
   };
   const CreateField = async (e: any) => {
     e.preventDefault();
-    if (!newFieldName.value.match(/[\S\s]+[\S]+/) || newFieldName.value.length > 20) {
+    if (
+      !newFieldName.value.match(/[\S\s]+[\S]+/) ||
+      newFieldName.value.length > 20
+    ) {
       setNewFieldName((prev) => ({ ...prev, hasError: true }));
       return;
     }
@@ -109,10 +153,11 @@ export default function Dashboard() {
   }
 
   const gap = "gap-4";
-  if(auth?.isOffline) return <h1 className="text-2xl text-center mt-10">You are Offline</h1>
+  if (auth?.isOffline)
+    return <h1 className="text-2xl text-center mt-10">You are Offline</h1>;
   return (
     <>
-      <Analytics/>
+      <Analytics />
       <div
         className={`${
           addFieldModalOpen ? "bg-black/80" : "pointer-events-none"
@@ -235,7 +280,7 @@ export default function Dashboard() {
             fieldsData={fieldsData}
             className="grow w-full lg:w-48 h-96 card p-4"
           />
-          <TodoList className="grow w-full lg:w-48 h-96 card p-4"/>
+          <TodoList className="grow w-full lg:w-48 h-96 card p-4" />
           {/* {
             !breakpoints.isXl && <Heatmap fieldsData={fieldsData} className="grow w-full lg:w-96 card p-4"/>
           } */}
