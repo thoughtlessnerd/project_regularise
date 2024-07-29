@@ -19,11 +19,13 @@ export default function Checklist(props: {
       clearTimeout(timeoutId);
     }
     setTimeoutId(
-      Number(setTimeout(() => {
-        // console.log("Uploaded Checklist");
-        UploadChecklist();
-        setTimeoutId(-1);
-      }, 1000))
+      Number(
+        setTimeout(() => {
+          // console.log("Uploaded Checklist");
+          UploadChecklist();
+          setTimeoutId(-1);
+        }, 1000)
+      )
     );
   }, [doneFields]);
 
@@ -64,8 +66,9 @@ export default function Checklist(props: {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className={`${timeoutId == -1 ? "opacity-0" : ""
-            } w-6 h-6 transition-opacity duration-500 animate-spin`}
+          className={`${
+            timeoutId == -1 ? "opacity-0" : ""
+          } w-6 h-6 transition-opacity duration-500 animate-spin`}
         >
           <path
             strokeLinecap="round"
@@ -75,34 +78,37 @@ export default function Checklist(props: {
         </svg>
       </h1>
       <div className="grow h-full overflow-y-auto m-2 p-2">
-        {
-          (() => {
-            if (props.fieldsData)
-              return (
-                props.fieldsData.fields && Object.keys(props.fieldsData.fields).map((key, index) => {
-                  return (
-                    <div key={index} className="flex gap-4 items-center mt-4">
-                      <input
-                        id={`${key}`}
-                        checked={doneFields.includes(key)}
-                        onChange={() => handleCheck(key)}
-                        type="checkbox"
-                        name=""
-                        className="appearance-none rounded-full outline outline-1 checked:outline-none outline-primary checked:bg-primary h-6 w-6 relative after:w-[50%] after:h-[90%] after:absolute after:translate-x-[90%] after:-translate-y-1/4 after:scale-110 after:rotate-45 after:duration-100 after:border-transparent checked:after:border-text after:border-b-4 after:border-r-4"
-                      />
-                      <label
-                        htmlFor={`${key}`}
-                        className={`${doneFields.includes(key) ? "after:origin-left after:scale-100 opacity-50" : "after:origin-right after:scale-0"} after:transition-transform transition-all relative after:bg-text after:absolute after:w-full after:h-[2px] after:left-0 after:top-1/2 after:-translate-y-1/2 after:duration-300`}
-                      >
-                        {key}
-                      </label>
-                    </div>
-                  );
-                })
-              )
-            else return <div>Add atleast 1 field to get started.</div>
-          })()
-        }
+        {(() => {
+          if (props.fieldsData)
+            return (
+              props.fieldsData.fields &&
+              Object.keys(props.fieldsData.fields).map((key, index) => {
+                return (
+                  <div key={index} className="flex gap-4 items-center mt-4">
+                    <input
+                      id={`${key}`}
+                      checked={doneFields.includes(key)}
+                      onChange={() => handleCheck(key)}
+                      type="checkbox"
+                      name=""
+                      className="appearance-none flex-shrink-0 rounded-full outline outline-1 checked:outline-none outline-primary checked:bg-primary h-6 w-6 relative after:w-[50%] after:h-[90%] after:absolute after:translate-x-[90%] after:-translate-y-1/4 after:scale-110 after:rotate-45 after:duration-100 after:border-transparent checked:after:border-text after:border-b-4 after:border-r-4"
+                    />
+                    <label
+                      htmlFor={`${key}`}
+                      className={`${
+                        doneFields.includes(key)
+                          ? "after:origin-left after:scale-100 opacity-50"
+                          : "after:origin-right after:scale-0"
+                      } after:transition-transform transition-all relative after:bg-text after:absolute after:w-full after:h-[2px] after:left-0 after:top-1/2 after:-translate-y-1/2 after:duration-300`}
+                    >
+                      {key}
+                    </label>
+                  </div>
+                );
+              })
+            );
+          else return <div>Add atleast 1 field to get started.</div>;
+        })()}
       </div>
       {/* <Button onClick={()=>UploadChecklist()} color={"primary"}>Update Checklist</Button> */}
     </div>
