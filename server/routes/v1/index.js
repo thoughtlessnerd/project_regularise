@@ -8,7 +8,7 @@ const { isAuthenticated } = require("../../middlewares/auth-middleware");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    res.send("Server is running");
+  res.send("Server is running");
 });
 
 router.post("/user/signup", userController.signUp);
@@ -34,5 +34,7 @@ router.delete("/image", isAuthenticated, imageController.deleteProfileImage);
 router.get("/quote", quoteController.getQuoteForToday);
 
 router.post("/task", isAuthenticated, userController.updateTasks);
+
+router.post("/notification", isAuthenticated, userController.updateNotifToken);
 
 module.exports = router;

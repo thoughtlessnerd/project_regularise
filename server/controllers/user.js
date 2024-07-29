@@ -78,7 +78,24 @@ class userController {
         userID: req.user,
       };
       const user = await this.service.updateTasks(data);
-      res.status(200).json({ message: "task updated", success: true, data: user });
+      res
+        .status(200)
+        .json({ message: "task updated", success: true, data: user });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+  updateNotifToken = async (req, res) => {
+    try {
+      const data = {
+        notifToken: req.body.token,
+        userID: req.user,
+      };
+      console.log(req.body);
+      const user = await this.service.updateNotifToken(data);
+      res
+        .status(201)
+        .json({ message: "notif token updated", success: true, data: user });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

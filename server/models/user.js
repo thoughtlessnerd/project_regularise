@@ -38,7 +38,10 @@ const userSchema = new mongoose.Schema(
     },
     tasks: {
       type: Object,
-    }
+    },
+    notifToken: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
